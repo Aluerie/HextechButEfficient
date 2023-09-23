@@ -101,7 +101,7 @@ async def connect(connection: Connection):
     print("LCU API is ready to be used.")
     summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
     if summoner.status != 200:
-        print("Apparently, you are not logged in. Please, login into your account and restart the script...")
+        print("Please login into your account and restart the script...")
     else:
         await worker_func(connection, summoner)
 

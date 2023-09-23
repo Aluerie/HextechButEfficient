@@ -9,44 +9,51 @@
 
 - [HextechButEfficient](#hextechbutefficient)
   - [📔 Table of Contents](#-table-of-contents)
-  - [🔵 Champion Shards disenchant accounting for Mastery levels](#-champion-shards-disenchant-accounting-for-mastery-levels)
-  - [😈 Remove Challenges Tokens](#-remove-challenges-tokens)
-  - [⚙️ Backup/Restore Settings](#️-backuprestore-settings)
-  - [🟠 Skins and Skin Shards related statistics/math](#-skins-and-skin-shards-related-statisticsmath)
+  - [📃 List of Scripts](#-list-of-scripts)
+    - [🔵 Champion Shards disenchant accounting for Mastery levels](#-champion-shards-disenchant-accounting-for-mastery-levels)
+    - [😈 Remove Challenges Tokens](#-remove-challenges-tokens)
+    - [⚙️ Backup/Restore Settings](#️-backuprestore-settings)
+    - [🟠 Skins and Skin Shards related statistics/math](#-skins-and-skin-shards-related-statisticsmath)
+  - [🪚 Ideas and Contributions](#-ideas-and-contributions)
+  - [👊 Riot Games Approval](#-riot-games-approval)
+  - [⚠️ No Personal Responsibility Disclaimer](#️-no-personal-responsibility-disclaimer)
 
-## 🔵 Champion Shards disenchant accounting for Mastery levels
+## 📃 List of Scripts
+
+### 🔵 Champion Shards disenchant accounting for Mastery levels
 
 > **Note**
-> This script is located in `be_mastery/` folder
+> This script is located in `be_management/` folder
 
-When you upgrade Champion Mastery level you can either spend a champion shard (partial or permanent) or 2400 BE. If you want to be efficient BE-wise you should definitely choose partial champion shard from those (maybe even wait to get it from level-up capsules if you don't have one already). Thus when disenchanting your collection of champion shards for BE Emporium you want to
+When you disenchant the collection of your shards: if you want to level up your Champion Masteries in Future - you should be saving enough shards to upgrade it to the Mastery 7. Because it's simply cheaper than 2400 BE option. Thus when disenchanting your collection of champion shards for BE Emporium you want to
 
+- keep 3 shards for champions you don't own
 - keep 2 shards for your level 5 and below champions
-- keep 1 shard for your level 6 champions
-- and you are free to disenchant all shards for your level 7 champions.
-- keep 3 shards for champions you don't own.
-- disenchant all permanent shards of champions you own
+- keep 1 shard for level 6 champions
+- disenchant all remaining shards (i.e., level 7 ones)
 
-Now, I can see improvements to this strategy, i.e selecting some champion pool you won't ever grind/play/buy meaning you can freely disenchant those shards too since you declare those to be completely useless. Let's start with general strategy for all.
+There are definitely some improvements to make to this strategy and more customisation, especially when I make GUI. But for now, let's start with this basic but most needed strategy.
 
-## 😈 Remove Challenges Tokens
+PS. Riot introduced Mass-Disenchant function into the client. But, unfortunately, it does not account for Champion Mastery levels like this script does. This is why I call this script BetterMassDisenchant.
+
+### 😈 Remove Challenges Tokens
 
 > **Note**
 > This script is located in `remove_tokens/` folder
 
-For some reason, you can't deselect Challenge tokens in this menu (please inform me how if it is possible):
+For some reason, you can't deselect Challenge tokens in the following menu:
 ![Remove Tokens](./assets/remove_tokens.png)
 
 Well, fortunately, the script does exactly that: remove tokens from your profile - resetting it to a state with 3 empty tokens.
 
-## ⚙️ Backup/Restore Settings
+### ⚙️ Backup/Restore Settings
 
 > **Note**
 > This script is located in `settings/` folder
 
-Self-explanatory, I guess. Sometimes Riot Client is behaving itself really badly and occasionally it might result in a total wipe out of your settings. It happened to me a few times. You can back-up settings folder or something. But here I backup settings requested from the client itself into `.json` files. There is also restore those settings script.
+Self-explanatory, sometimes Riot Client behaves itself really badly and occasionally it might result in a total wipe out of your settings. It happened to me a few times. Yes, you can just back-up settings folder in installation directory or something. But here request settings from the client itself into `.json` files. There is also restore script.
 
-## 🟠 Skins and Skin Shards related statistics/math
+### 🟠 Skins and Skin Shards related statistics/math
 
 > **Note**
 > This script is located in `skin_shards/` folder
@@ -54,3 +61,17 @@ Self-explanatory, I guess. Sometimes Riot Client is behaving itself really badly
 If you are buying a lot of event passes or hextech treasures, or abuse friend gifting mystery skin - at some point you start wondering "What's the most efficient way of grinding skins? What's the best strategy?". After a bit you realise that those questions are really difficult to answer if we try to optimize as much as possible. However, let's try our best.
 
 We will need Excel spreadsheet or similar table. And for the math here we would need to know our situation about skins/skin shards loot. The script fetches this info for you to copypaste.
+
+## 🪚 Ideas and Contributions
+
+Feel free to make contributions, reach me with your ideas, report bugs, etc.
+
+## 👊 Riot Games Approval
+
+Sorry, I'm yet to send a request for approval (all things that use LCU API are recommended to be approved by Riot) - I want to make GUI first.
+
+Either way, it's more of a formality, you will not get banned. Many similar applications that also use LCU API with different purposes already exist and have no problems. Honourable mention: [HextechButBetter](https://github.com/MaciejGorczyca/HextechButBetter) repository.
+
+## ⚠️ No Personal Responsibility Disclaimer
+
+I am not to be held responsible for any losses, mistakes and "mistakes", or bugs that can lead to unfortunate situations. Use my scripts/modify them on your own risk. Well, I mean, my scripts should be fine, but still, if anything happens - I won't be able to refund those shards back or something.

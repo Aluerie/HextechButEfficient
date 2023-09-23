@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Mapping, TypedDict
+from typing import TYPE_CHECKING, Mapping
 
 from lcu_driver import Connector
 
@@ -16,14 +16,14 @@ async def work_func(connection, summoner):
     # Champion ID - Mastery Level Mapping
     champid_mlvl_map: Mapping = {}
 
-    req1 = await connection.request("get", f"/lol-collections/v1/inventories/{summoner_id}/champion-mastery")
-    for item in await req1.json():
+    mastery_req = await connection.request("get", f"/lol-collections/v1/inventories/{summoner_id}/champion-mastery")
+    for item in await mastery_req.json():
         champid_mlvl_map[item["championId"]] = item["championLevel"]
 
     # Loot
-    req2 = await connection.request("get", "/lol-loot/v1/player-loot")
+    loot_req = await connection.request("get", "/lol-loot/v1/player-loot")
 
-    for item in await req2.json():
+    for item in await loot_req.json():
         if item["type"] == "CHAMPION_RENTAL":
             if item["itemStatus"] == "OWNED":
                 champ_id = item["storeItemId"]
@@ -42,7 +42,7 @@ async def work_func(connection, summoner):
             disenchant_shards = max(0, item["count"] - save_shards)
 
             if disenchant_shards:
-                req3 = await connection.request(
+                disenchant_req = await connection.request(
                     "post",
                     f"/lol-loot/v1/recipes/CHAMPION_RENTAL_disenchant/craft?repeat={disenchant_shards}",
                     data=[item["lootName"]],
@@ -54,7 +54,7 @@ async def connect(connection: Connection):
     print("LCU API is ready to be used.")
     summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
     if summoner.status != 200:
-        print("Please login into your account to change your icon and restart the script...")
+        print("Please login into your account and restart the script...")
     else:
         await work_func(connection, summoner)
 

@@ -12,9 +12,7 @@ connector = Connector()
 
 
 async def worker_func(connection: Connection) -> None:
-    """Main function of this script.
-
-    Which is to print a dictionary that shows how many skin shards of each price tier
+    """Print a dictionary that shows how many skin shards of each price tier
     I own/do not own.
 
     This information gets pasted into excel spreadsheet for further and more visually appealing math.
@@ -45,7 +43,7 @@ async def connect(connection: Connection):
     print("LCU API is ready to be used.")
     summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
     if summoner.status != 200:
-        print("Apparently, you are not logged in. Please, login into your account and restart the script...")
+        print("Please login into your account and restart the script...")
     else:
         await worker_func(connection)
 
