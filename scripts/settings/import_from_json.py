@@ -1,27 +1,22 @@
+from __future__ import annotations
+
 import json
+from typing import TYPE_CHECKING
 
-from lcu_driver import Connector
+from src.my_connector import AluConnector
 
-connector = Connector()
-
-
-@connector.ready
-async def connect(connection):
-    print("LCU API is ready to be used.")
-    summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
-    if summoner.status != 200:
-        print("Please login into your account and restart the script...")
-    else:
-        for item in ["game-settings", "input-settings"]:
-            f = open(f"settings/.backup/{item}.json")
-            data = json.load(f)
-            req = await connection.request("patch", f"/lol-game-settings/v1/{item}", data=data)
-            print(f"{item} req status: {req.status}")
+if TYPE_CHECKING:
+    from aiohttp import ClientResponse
+    from lcu_driver.connection import Connection
 
 
-@connector.close
-async def disconnect(_):
-    print("The client have been closed!")
+async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
+    for item in ["game-settings", "input-settings"]:
+        f = open(f"settings/.backup/{item}.json")
+        data = json.load(f)
+        req = await connection.request("patch", f"/lol-game-settings/v1/{item}", data=data)
+        print(f"{item} req status: {req.status}")
 
 
+connector = AluConnector(worker_func)
 connector.start()

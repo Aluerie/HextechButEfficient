@@ -9,6 +9,24 @@ if TYPE_CHECKING:
 
 
 class AluConnector(Connector):
+    """My subclass to lcu_driver's Connector
+
+    Just to reduce spam of the same code block.
+
+    How to use this:
+
+    >>> from src.my_connector import AluConnector
+    >>> # later
+    >>> connector = AluConnector(worker_func)
+    >>> connector.start()
+    
+    Note that worker_func is supposed to be of the following signature:
+
+    >>> async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
+
+    worker_func is supposed to do the job in a script. 
+    """
+
     def __init__(
         self,
         coro_func,
@@ -27,7 +45,7 @@ class AluConnector(Connector):
         if summoner.status != 200:
             print("Please login into your account and restart the script...")
         else:
-            await self.coro_func(connection)
+            await self.coro_func(connection, summoner)
 
     async def disconnect(self, _: Connection):
         print("The LCU API client have been closed!")

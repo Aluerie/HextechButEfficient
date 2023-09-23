@@ -1,24 +1,22 @@
-from lcu_driver import Connector
+from __future__ import annotations
 
-connector = Connector()
+from typing import TYPE_CHECKING
 
+from src.my_connector import AluConnector
 
-@connector.ready
-async def connect(connection):
-    print("LCU API is ready to be used.")
-    summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
-    if summoner.status != 200:
-        print("Please login into your account and restart the script...")
-    else:
-        req = await connection.request(
-            "post", "/lol-challenges/v1/update-player-preferences/", data={"challengeIds": []}
-        )
-        print(f"Req status: {req.status}")
+if TYPE_CHECKING:
+    from aiohttp import ClientResponse
+    from lcu_driver.connection import Connection
 
 
-@connector.close
-async def disconnect(_):
-    print("The client have been closed!")
+async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
+    req = await connection.request(
+        "post",
+        "/lol-challenges/v1/update-player-preferences/",
+        data={"challengeIds": []},
+    )
+    print(f"Req status: {req.status}")
 
 
+connector = AluConnector(worker_func)
 connector.start()

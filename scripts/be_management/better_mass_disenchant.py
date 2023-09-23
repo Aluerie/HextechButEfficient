@@ -2,15 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Mapping
 
-from lcu_driver import Connector
+from src.my_connector import AluConnector
 
 if TYPE_CHECKING:
+    from aiohttp import ClientResponse
     from lcu_driver.connection import Connection
 
-connector = Connector()
 
-
-async def work_func(connection, summoner):
+async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
     summoner_id: int = (await summoner.json())["summonerId"]
 
     # Champion ID - Mastery Level Mapping
@@ -49,19 +48,5 @@ async def work_func(connection, summoner):
                 )
 
 
-@connector.ready
-async def connect(connection: Connection):
-    print("LCU API is ready to be used.")
-    summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
-    if summoner.status != 200:
-        print("Please login into your account and restart the script...")
-    else:
-        await work_func(connection, summoner)
-
-
-@connector.close
-async def disconnect(_: Connection):
-    print("The client have been closed!")
-
-
+connector = AluConnector(worker_func)
 connector.start()

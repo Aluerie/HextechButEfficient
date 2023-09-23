@@ -23,7 +23,7 @@
 ### 🔵 Champion Shards disenchant accounting for Mastery levels
 
 > **Note**
-> This script is located in `be_management/` folder
+> This script is located in `scripts/be_management/` folder
 
 When you disenchant the collection of your shards: if you want to level up your Champion Masteries in Future - you should be saving enough shards to upgrade it to the Mastery 7. Because it's simply cheaper than 2400 BE option. Thus when disenchanting your collection of champion shards for BE Emporium you want to
 
@@ -32,14 +32,14 @@ When you disenchant the collection of your shards: if you want to level up your 
 - keep 1 shard for level 6 champions
 - disenchant all remaining shards (i.e., level 7 ones)
 
-There are definitely some improvements to make to this strategy and more customisation, especially when I make GUI. But for now, let's start with this basic but most needed strategy.
+There are definitely some improvements to this strategy and more possible customisation, especially when I make GUI. But for now, let's start with this basic but _**most**_ needed strategy.
 
-PS. Riot introduced Mass-Disenchant function into the client. But, unfortunately, it does not account for Champion Mastery levels like this script does. This is why I call this script BetterMassDisenchant.
+PS. Riot introduced Mass-Disenchant function into the client. But, unfortunately, it does not account for Champion Mastery levels like this script does. This is why I call this script BetterMassDisenchant. Soon even more features.
 
 ### 😈 Remove Challenges Tokens
 
 > **Note**
-> This script is located in `remove_tokens/` folder
+> This script is located in `scripts/remove_tokens/` folder
 
 For some reason, you can't deselect Challenge tokens in the following menu:
 ![Remove Tokens](./assets/remove_tokens.png)
@@ -49,14 +49,14 @@ Well, fortunately, the script does exactly that: remove tokens from your profile
 ### ⚙️ Backup/Restore Settings
 
 > **Note**
-> This script is located in `settings/` folder
+> This script is located in `scripts/settings/` folder
 
 Self-explanatory, sometimes Riot Client behaves itself really badly and occasionally it might result in a total wipe out of your settings. It happened to me a few times. Yes, you can just back-up settings folder in installation directory or something. But here request settings from the client itself into `.json` files. There is also restore script.
 
 ### 🟠 Skins and Skin Shards related statistics/math
 
 > **Note**
-> This script is located in `skin_shards/` folder
+> This script is located in `scripts/skin_shards/` folder
 
 If you are buying a lot of event passes or hextech treasures, or abuse friend gifting mystery skin - at some point you start wondering "What's the most efficient way of grinding skins? What's the best strategy?". After a bit you realise that those questions are really difficult to answer if we try to optimize as much as possible. However, let's try our best.
 
@@ -68,7 +68,7 @@ Feel free to make contributions, reach me with your ideas, report bugs, etc.
 
 ## 👊 Riot Games Approval
 
-Sorry, I'm yet to send a request for approval (all things that use LCU API are recommended to be approved by Riot) - I want to make GUI first.
+Sorry, I'm yet to send a request for approval (all things that use LCU API are recommended to be certified by Riot) - I want to make GUI first.
 
 Either way, it's more of a formality, you will not get banned. Many similar applications that also use LCU API with different purposes already exist and have no problems. Honourable mention: [HextechButBetter](https://github.com/MaciejGorczyca/HextechButBetter) repository.
 
