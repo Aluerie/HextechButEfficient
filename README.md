@@ -27,14 +27,14 @@ These Scripts mostly use [LCU API](<https://riot-api-libraries.readthedocs.io/en
 > **Note**
 > This script is located in `scripts/be_management/`
 
-When you disenchant the collection of your shards then if you want to keep levelling up your Champion Masteries in Future - you should be saving enough shards to upgrade those. It's simply cheaper than 2400 BE option. Thus when disenchanting your collection of champion shards for BE Emporium you want to
+When you disenchant the collection of your shards then if you want to keep levelling up your Champion Masteries in Future - you should be saving enough shards to upgrade those. It's simply cheaper than 2400 BE option. Thus when disenchanting your champion shards for BE Emporium you need to
 
 - keep 3 shards for champions you don't own
 - keep 2 shards for your level 5 and below champions
 - keep 1 shard for level 6 champions
 - disenchant all remaining shards (i.e., level 7 ones or excess level 6 ones)
 
-There are definitely some improvements to this strategy and more possible customisation, especially when I make GUI. But for now, let's start with this basic but _**most**_ needed strategy.
+There are definitely some improvements to this strategy, more automatisation and more possible customisation, especially when I make GUI. But for now, let's start with this basic but _**most**_ needed strategy.
 
 PS. Riot introduced Mass-Disenchant function into the client. But, unfortunately, it does not account for Champion Mastery levels like this script does. This is why I call this script BetterMassDisenchant. Soon even more features.
 
