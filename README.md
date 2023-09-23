@@ -1,9 +1,11 @@
 # HextechButEfficient
 
-🔠League of Legends snippet scripts gathered in GUI for quick &amp; efficient loot (and not only) management in a min-max resources style. I also provide some utility scripts that aren't about loot.
+🔠League of Legends snippet scripts gathered in GUI for quick &amp; efficient loot (and not only) management in a min-max resources style (without long annoying animations too). Also some utility scripts that aren't about loot.
 
 > **Warning**
 > Unfortunately, I have not done GUI yet so for now it's only Python scripts that you can run yourself and see the output.
+
+These Scripts mostly use [LCU API](<https://riot-api-libraries.readthedocs.io/en/latest/lcu.html>).
 
 ## 📔 Table of Contents
 
