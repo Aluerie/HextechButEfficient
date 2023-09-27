@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Awaitable, Callable
 
 from lcu_driver import Connector
 
 if TYPE_CHECKING:
+    from aiohttp import ClientResponse
     from lcu_driver.connection import Connection
 
 
@@ -19,23 +20,23 @@ class AluConnector(Connector):
     >>> # later
     >>> connector = AluConnector(worker_func)
     >>> connector.start()
-    
+
     Note that worker_func is supposed to be of the following signature:
 
     >>> async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
 
-    worker_func is supposed to do the job in a script. 
+    worker_func is supposed to do the job in a script.
     """
 
     def __init__(
         self,
-        coro_func,
+        coro_func: Callable[[Connection, ClientResponse], Awaitable[None]],
         *,
         loop=None,
     ):
         super().__init__(loop=loop)
 
-        self.coro_func = coro_func
+        self.coro_func: Callable[[Connection, ClientResponse], Awaitable[None]] = coro_func
         self._set_event("ready", self.connect)
         self._set_event("disconnect", self.disconnect)
 
