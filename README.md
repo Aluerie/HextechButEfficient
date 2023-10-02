@@ -1,11 +1,11 @@
 # HextechButEfficient
 
-🔠League of Legends scripts for quick &amp; efficient management of some chores in a min-max style.
+🔠League of Legends [LCU API](<https://riot-api-libraries.readthedocs.io/en/latest/lcu.html>) scripts for quick &amp; efficient management of some chores in a min-max style.
 
 > **Warning**
 > Unfortunately, I have not done GUI yet so for now it's only Python scripts that you can run yourself and see the output.
 
-These scripts mostly use [LCU API](<https://riot-api-libraries.readthedocs.io/en/latest/lcu.html>).
+No more annoying animations, no more chore calculations, no more chore lookups in other tab like "do I have mastery 7 on that champ?". Say "No more" to any inefficiency.
 
 ## 📔 Table of Contents
 
@@ -14,6 +14,7 @@ These scripts mostly use [LCU API](<https://riot-api-libraries.readthedocs.io/en
   - [📃 List of Scripts](#-list-of-scripts)
     - [🔵 Efficient BE-management](#-efficient-be-management)
     - [🟠 Efficient OE-management](#-efficient-oe-management)
+    - [🤯 Misc](#-misc)
     - [😈 Remove Challenges Tokens](#-remove-challenges-tokens)
     - [⚙️ Backup/Restore Settings](#️-backuprestore-settings)
     - [💎 Skins and Skin Shards related statistics/math](#-skins-and-skin-shards-related-statisticsmath)
@@ -34,24 +35,34 @@ This includes:
 - [ ] Mass-Open everything that has BE potential:
   - [ ] Champion capsules (basic/glorious)
   - [ ] Honour capsules/orbs
-  - [ ] Hextech chests
   - [ ] Not-permanent random champion shards
+  - [ ] etc???
 - [ ] Upgrade Champion Mastery if available
 - [ ] Upgrade champion shards (after price is below 7800)
 - [ ] (?) Possibility to choose favourite/hated champions so they have different treatment
-- [ ] Remove `isNew` shining in loot tab that you need to hover over the shards to remove.
 
 ### 🟠 Efficient OE-management
 
 This includes
 
 - [ ] Open all esports capsules.
+- [ ] Mass-Open everything has OE potential:
+  - [ ] Hextech chests
+    - [ ] Combine Key Fragments for them
+  - [ ] Random wards
+  - [ ] Eternal capsules
+  - [ ] etc???
 - [ ] Disenchant all:
   - [ ] emotes
   - [ ] icons
   - [ ] eternals
   - [ ] wards
 - [ ] Waste all OE to upgrade the cheapest skin shards.
+
+### 🤯 Misc
+
+- [ ] (Misc) Remove `isNew` shining in loot tab that you need to hover over the shards to remove.
+- [ ] Some memory-script that remembers to do everything ticked like one button to rule them all that would do everything marked like all points from OE management and upgrade champion masteries.
 
 ### 😈 Remove Challenges Tokens
 
