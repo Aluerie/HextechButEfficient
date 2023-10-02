@@ -15,6 +15,7 @@ No more annoying animations, no more chore calculations, no more chore lookups i
     - [🔵 Efficient BE-management](#-efficient-be-management)
     - [🟠 Efficient OE-management](#-efficient-oe-management)
     - [🤯 Misc](#-misc)
+    - [🪓 Final Chore minimisation](#-final-chore-minimisation)
     - [😈 Remove Challenges Tokens](#-remove-challenges-tokens)
     - [⚙️ Backup/Restore Settings](#️-backuprestore-settings)
     - [💎 Skins and Skin Shards related statistics/math](#-skins-and-skin-shards-related-statisticsmath)
@@ -30,15 +31,19 @@ No more annoying animations, no more chore calculations, no more chore lookups i
 This includes:
 
 - [ ] Mass-Disenchant Champion Shards accounting for Mastery levels.
-  - [X] keep `3/2/1/0` shards depending on their mastery level - corresponding to `not_owned/5 and below/6/7`.
+  - [X] keep `3/2/1/0` champion shards depending on their mastery - respectively to `not_owned/5_and_below/6/7` level.
   - [ ] Disenchant permanent shards for owned champions.
 - [ ] Mass-Open everything that has BE potential:
+  - [ ] Hextech chests
+    - [ ] Combine Key Fragments for them
   - [ ] Champion capsules (basic/glorious)
   - [ ] Honour capsules/orbs
   - [ ] Not-permanent random champion shards
   - [ ] etc???
 - [ ] Upgrade Champion Mastery if available
-- [ ] Upgrade champion shards (after price is below 7800)
+- [ ] Upgrade champion shards
+  - [ ] Champion shards after price is below 7800
+  - [ ] Permanent champion shards
 - [ ] (?) Possibility to choose favourite/hated champions so they have different treatment
 
 ### 🟠 Efficient OE-management
@@ -61,7 +66,11 @@ This includes
 
 ### 🤯 Misc
 
-- [ ] (Misc) Remove `isNew` shining in loot tab that you need to hover over the shards to remove.
+- [ ] Remove `isNew` shining in loot tab that you need to hover over the shards to remove.
+  - [ ] Select what shining to remove, i.e. shining over champion shards is pointless, but shining over skin shards is useful.
+
+### 🪓 Final Chore minimisation
+
 - [ ] Some memory-script that remembers to do everything ticked like one button to rule them all that would do everything marked like all points from OE management and upgrade champion masteries.
 
 ### 😈 Remove Challenges Tokens
