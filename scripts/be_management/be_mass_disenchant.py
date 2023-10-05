@@ -1,3 +1,10 @@
+"""
+# Mass-Disenchant Champion Shards accounting for Mastery levels.
+
+- [X] keep 3/2/1/0 champion shards depending on their mastery - 
+respectively to not_owned/5_and_below/6/7 level.
+- [ ] Disenchant permanent shards for owned champions.
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Mapping
