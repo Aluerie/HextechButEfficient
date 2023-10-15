@@ -18,7 +18,7 @@ async def worker_func(connection: Connection, _summoner: ClientResponse) -> None
         # pprint.pprint(gs_json)
 
         # ensure .temp folder
-        backup_dir = "settings/.backup/"
+        backup_dir = "scripts/settings_backup/.backup/"
         Path(backup_dir).mkdir(parents=True, exist_ok=True)
         with open(f"{backup_dir}{item}.json", "w") as f:
             json.dump(data, f, indent=4)

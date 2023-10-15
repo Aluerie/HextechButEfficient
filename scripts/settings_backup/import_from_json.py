@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
     for item in ["game-settings", "input-settings"]:
-        f = open(f"settings/.backup/{item}.json")
+        f = open(f"scripts/settings_backup/.backup/{item}.json")
         data = json.load(f)
         req = await connection.request("patch", f"/lol-game-settings/v1/{item}", data=data)
         print(f"{item} req status: {req.status}")

@@ -77,7 +77,7 @@ Feel free to make contributions, reach me with your ideas, report bugs, etc.
 
 Sorry, I'm yet to send a request for approval (all things that use LCU API are recommended to be certified by Riot) - I want to make GUI first.
 
-Either way, it's more of a formality, you will not get banned. Many similar applications that also use LCU API with different purposes already exist and have no problems. Honourable mention: [HextechButBetter](https://github.com/MaciejGorczyca/HextechButBetter) repository.
+Either way, it's more of a formality, you will not get banned for using this tool/scripts. Many similar applications that also use LCU API with different purposes already exist and have no problems. Honourable mention: [HextechButBetter](https://github.com/MaciejGorczyca/HextechButBetter) repository.
 
 ## ⚠️ No Personal Responsibility Disclaimer
 
