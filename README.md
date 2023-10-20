@@ -27,7 +27,7 @@ No more annoying animations, no more chore calculations, no more chore lookups i
 
 ## 📃 List of Scripts
 
-The checkmark ☑️ in lists below means script is implemented. If it's not then it's coming soon™️.
+The checkmark ☑️ in lists below means script is implemented. If not then it's coming soon™️.
 
 ### 🔵 Efficient BE (Blue Essence) management
 
