@@ -27,6 +27,8 @@ No more annoying animations, no more chore calculations, no more chore lookups i
 
 ## 📃 List of Scripts
 
+The checkmark ✅ in lists below means script is implemented. If it's not then it's coming soon™️.
+
 ### 🔵 Efficient BE (Blue Essence) management
 
 - [X] Mass-Disenchant Champion Shards accounting for Mastery levels.
