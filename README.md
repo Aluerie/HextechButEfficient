@@ -19,6 +19,7 @@ No more annoying animations, no more chore calculations, no more chore lookups i
     - [😈 Remove Challenges Tokens](#-remove-challenges-tokens)
     - [⚙️ Backup/Restore Settings](#️-backuprestore-settings)
     - [💎 Skins and Skin Shards related statistics/math](#-skins-and-skin-shards-related-statisticsmath)
+    - [🚢 Event Pass](#-event-pass)
   - [🪚 Ideas and Contributions](#-ideas-and-contributions)
   - [👊 Riot Games Approval](#-riot-games-approval)
   - [⚠️ No Personal Responsibility Disclaimer](#️-no-personal-responsibility-disclaimer)
@@ -37,6 +38,7 @@ No more annoying animations, no more chore calculations, no more chore lookups i
 - [ ] Mass-Disenchant everything that gives OE.
 - [ ] Mass-Open OE related loot.
 - [ ] Waste all OE to upgrade the cheapest skin shards.
+- [X] Show skin shards for champions without a skin.
 
 ### 🤯 Misc
 
@@ -45,7 +47,7 @@ No more annoying animations, no more chore calculations, no more chore lookups i
 
 ### 🪓 Final Chore minimisation
 
-- [ ] Construct your own chore out of available scripts and gather it all in just one button.
+- [ ] Construct your own chore out of available scripts, gather it all in just one button and even schedule it.
 
 ### 😈 Remove Challenges Tokens
 
@@ -69,9 +71,14 @@ The scripts here:
 - [X] Prints statistic about your skin collection. Number of owned/not-owned skins per RP price tier.
 - [X] Same^ for shards loot.
 
+### 🚢 Event Pass
+
+- [ ] Claim all rewards.
+- [ ] Buy all skin orbs with a limit.
+
 ## 🪚 Ideas and Contributions
 
-Feel free to make contributions, reach me with your ideas, report bugs, etc.
+Feel free to make contributions, reach me with your ideas and suggestions, report bugs, etc.
 
 ## 👊 Riot Games Approval
 
