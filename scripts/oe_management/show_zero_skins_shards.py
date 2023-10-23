@@ -7,16 +7,20 @@ https://gist.github.com/bangingheads/e1e5f6aa9ee9ca74d84edc8874d04a59
 
 At some point, I will streamline this script and all other scripts into my whole chore-bulking concept.
 """
+from __future__ import annotations
 
-from lcu_driver import Connector
-import requests
+from typing import TYPE_CHECKING
+
 import easygui
+import requests
 
-connector = Connector()
+from common.connector import AluConnector
+
+if TYPE_CHECKING:
+    from lcu_driver.connection import Connection
 
 
-@connector.ready
-async def connect(connection):
+async def worker_func(connection: Connection):
     version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
     ddragon = requests.get(f"https://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/championFull.json").json()
     champs = ddragon["keys"]
@@ -58,4 +62,10 @@ async def connect(connection):
     easygui.msgbox(display, title="Champions With 0 Skins That Can Unlock", ok_button="Go Unlock Some Skins!")
 
 
-connector.start()
+def show_zero_skins_shards_button():
+    connector = AluConnector(worker_func)
+    connector.start()
+
+
+if __name__ == "__main__":
+    show_zero_skins_shards_button()

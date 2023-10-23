@@ -1,16 +1,16 @@
 from __future__ import annotations
 
+import asyncio
 from typing import TYPE_CHECKING, Protocol
 
 from lcu_driver import Connector
 
 if TYPE_CHECKING:
-    from aiohttp import ClientResponse
     from lcu_driver.connection import Connection
 
 
 class WorkerFunc(Protocol):
-    async def __call__(self, connection: Connection, summoner: ClientResponse) -> None:
+    async def __call__(self, connection: Connection) -> None:
         ...
 
 
@@ -30,8 +30,9 @@ class AluConnector(Connector):
     worker_func is supposed to do the job in a script.
     """
 
-    def __init__(self, coro_func: WorkerFunc, *, loop=None):
-        super().__init__(loop=loop)
+    def __init__(self, coro_func: WorkerFunc):
+        new_loop = asyncio.new_event_loop()  # idk asyncio stuff well but it errors out otherwise
+        super().__init__(loop=new_loop)
         self.coro_func: WorkerFunc = coro_func
         self._set_event("ready", self.connect)
         self._set_event("disconnect", self.disconnect)
@@ -39,10 +40,10 @@ class AluConnector(Connector):
     async def connect(self, connection: Connection):
         print("LCU API is ready to be used.")
         summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
-        if summoner.status != 200:
+        if summoner.status != 200:  # this is actually pointless since there s no login screen anymore
             print("Please login into your account and restart the script...")
         else:
-            await self.coro_func(connection, summoner)
+            await self.coro_func(connection)
 
     async def disconnect(self, _: Connection):
-        print("The LCU API client have been closed!")
+        print("Finished task. The LCU API client have been closed!")

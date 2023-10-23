@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from src.my_connector import AluConnector
+from common.connector import AluConnector
 
 if TYPE_CHECKING:
-    from aiohttp import ClientResponse
     from lcu_driver.connection import Connection
 
 
-async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
+async def worker_func(connection: Connection) -> None:
     req = await connection.request(
         "post",
         "/lol-challenges/v1/update-player-preferences/",
@@ -18,5 +17,10 @@ async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
     print(f"Req status: {req.status}")
 
 
-connector = AluConnector(worker_func)
-connector.start()
+def remove_challenges_tokens_button():
+    connector = AluConnector(worker_func)
+    connector.start()
+
+
+if __name__ == "__main__":
+    remove_challenges_tokens_button()

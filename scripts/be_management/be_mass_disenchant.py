@@ -5,18 +5,19 @@
 respectively to not_owned/5_and_below/6/7 level.
 - [ ] Disenchant permanent shards for owned champions.
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Mapping
 
-from src.my_connector import AluConnector
+from common.connector import AluConnector
 
 if TYPE_CHECKING:
-    from aiohttp import ClientResponse
     from lcu_driver.connection import Connection
 
 
-async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
+async def worker_func(connection: Connection) -> None:
+    summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
     summoner_id: int = (await summoner.json())["summonerId"]
 
     # Champion ID - Mastery Level Mapping
@@ -35,15 +36,15 @@ async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
                 champ_id = item["storeItemId"]
                 if champ_id in champid_mlvl_map:
                     if champid_mlvl_map[champ_id] == 7:
-                        save_shards = 0
+                        save_shards = 0  # mastery 7 champ
                     elif champid_mlvl_map[champ_id] == 6:
-                        save_shards = 1
+                        save_shards = 1  # mastery 6 champ
                     else:
-                        save_shards = 2
+                        save_shards = 2  # mastery 5 and below champ
                 else:
-                    save_shards = 2
+                    save_shards = 2  # (?) mastery 0 - owned, but never touched
             else:
-                save_shards = 3
+                save_shards = 3  # not owned champ
 
             disenchant_shards = max(0, item["count"] - save_shards)
 
@@ -55,5 +56,10 @@ async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
                 )
 
 
-connector = AluConnector(worker_func)
-connector.start()
+def be_mass_disenchant_button():
+    connector = AluConnector(worker_func)
+    connector.start()
+
+
+if __name__ == "__main__":
+    be_mass_disenchant_button()

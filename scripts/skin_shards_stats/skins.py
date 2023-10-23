@@ -5,10 +5,9 @@ from typing import TYPE_CHECKING, Mapping
 
 import aiohttp
 
-from src.my_connector import AluConnector
+from common.connector import AluConnector
 
 if TYPE_CHECKING:
-    from aiohttp import ClientResponse
     from lcu_driver.connection import Connection
 
 
@@ -47,13 +46,14 @@ async def get_skinid_rp_mapping() -> Mapping[int, int | str]:
     return skinid_rp_mapping
 
 
-async def get_skinid_owned_mapping(connection: Connection, summoner: ClientResponse) -> Mapping[int, bool]:
+async def get_skinid_owned_mapping(connection: Connection) -> Mapping[int, bool]:
     """Get mapping `skin_id` -> `is_owned` so
     we can know what skins I own/do not own.
 
     Example output:
     >>> {1001: False, 1002: True, ... 101012: True, ...}
     """
+    summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
     summoner_id: int = (await summoner.json())["summonerId"]
 
     req = await connection.request("get", f"/lol-champions/v1/inventories/{summoner_id}/skins-minimal")
@@ -66,7 +66,7 @@ async def get_skinid_owned_mapping(connection: Connection, summoner: ClientRespo
     return skinid_owned_mapping
 
 
-async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
+async def worker_func(connection: Connection) -> None:
     """Main function of this script.
 
     Which is to print a dictionary that shows how many skins of each price tier
@@ -79,7 +79,7 @@ async def worker_func(connection: Connection, summoner: ClientResponse) -> None:
     """
 
     skinid_rp_mapping = await get_skinid_rp_mapping()
-    skinid_owned_mapping = await get_skinid_owned_mapping(connection, summoner)
+    skinid_owned_mapping = await get_skinid_owned_mapping(connection)
 
     price_categories = {}  # {k: {"owned": 0, "not_owned": 0} for k in [520, 750, 975, 1350, 1820]}
 

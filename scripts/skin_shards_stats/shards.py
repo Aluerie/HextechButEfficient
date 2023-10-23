@@ -3,13 +3,13 @@ from __future__ import annotations
 import pprint
 from typing import TYPE_CHECKING
 
-from src.my_connector import AluConnector
+from common.connector import AluConnector
 
 if TYPE_CHECKING:
     from lcu_driver.connection import Connection
 
 
-async def worker_func(connection: Connection, _summoner) -> None:
+async def worker_func(connection: Connection) -> None:
     """Print a dictionary that shows how many skin shards of each price tier
     I own/do not own.
 

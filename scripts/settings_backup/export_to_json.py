@@ -4,14 +4,13 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from src.my_connector import AluConnector
+from common.connector import AluConnector
 
 if TYPE_CHECKING:
-    from aiohttp import ClientResponse
     from lcu_driver.connection import Connection
 
 
-async def worker_func(connection: Connection, _summoner: ClientResponse) -> None:
+async def worker_func(connection: Connection) -> None:
     for item in ["game-settings", "input-settings"]:
         req = await connection.request("get", f"/lol-game-settings/v1/{item}")
         data = await req.json()

@@ -16,13 +16,13 @@
                 "PYTHONPATH": "${cwd}"
             }
         },
-        // {
-        //     "name": "Python: Skins",
-        //     "type": "python",
-        //     "request": "launch",
-        //     "program": "skins.py",
-        //     "console": "integratedTerminal",
-        //     "justMyCode": true
-        // }
+        {
+            "name": "MAIN GUI",
+            "type": "python",
+            "request": "launch",
+            "program": "main_gui.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
     ]
 }

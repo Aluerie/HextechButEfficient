@@ -1,3 +1,4 @@
 lcu-driver
 requests
 easygui
+dearpygui
