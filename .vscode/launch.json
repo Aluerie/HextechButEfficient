@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Python: Run Current File",
             "type": "python",
             "request": "launch",
             "program": "${file}",
@@ -20,7 +20,7 @@
             "name": "MAIN GUI",
             "type": "python",
             "request": "launch",
-            "program": "main_gui.py",
+            "program": "main.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }

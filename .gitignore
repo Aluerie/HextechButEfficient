@@ -1,6 +1,7 @@
 **.ipynb
 venv/
 .backup/
+.temp/
 
 **.pyc
 

@@ -8,58 +8,55 @@ respectively to not_owned/5_and_below/6/7 level.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Mapping
+from typing import Mapping
 
-from common.connector import AluConnector
-
-if TYPE_CHECKING:
-    from lcu_driver.connection import Connection
+from common import AluConnector
 
 
-async def worker_func(connection: Connection) -> None:
-    summoner = await connection.request("get", "/lol-summoner/v1/current-summoner")
-    summoner_id: int = (await summoner.json())["summonerId"]
+class BEMassDisenchant(AluConnector):
+    async def callback(self) -> str:
+        r_summoner = await self.get("/lol-summoner/v1/current-summoner")
+        summoner_id: int = (await r_summoner.json())["summonerId"]
 
-    # Champion ID - Mastery Level Mapping
-    champid_mlvl_map: Mapping = {}
+        # Champion ID - Mastery Level Mapping
+        r_mastery = await self.get(f"/lol-collections/v1/inventories/{summoner_id}/champion-mastery")
+        champ_id_to_mastery_level: Mapping[int, int] = {
+            item["championId"]: item["championLevel"] for item in await r_mastery.json()
+        }
 
-    mastery_req = await connection.request("get", f"/lol-collections/v1/inventories/{summoner_id}/champion-mastery")
-    for item in await mastery_req.json():
-        champid_mlvl_map[item["championId"]] = item["championLevel"]
+        # Loot
+        r_loot = await self.get("/lol-loot/v1/player-loot")
 
-    # Loot
-    loot_req = await connection.request("get", "/lol-loot/v1/player-loot")
-
-    for item in await loot_req.json():
-        if item["type"] == "CHAMPION_RENTAL":
-            if item["itemStatus"] == "OWNED":
-                champ_id = item["storeItemId"]
-                if champ_id in champid_mlvl_map:
-                    if champid_mlvl_map[champ_id] == 7:
-                        save_shards = 0  # mastery 7 champ
-                    elif champid_mlvl_map[champ_id] == 6:
-                        save_shards = 1  # mastery 6 champ
+        total_shards_disenchanted = 0
+        for item in await r_loot.json():
+            match item["type"]:
+                case "CHAMPION_RENTAL":  # normal "partial" champion shard
+                    if item["itemStatus"] == "OWNED":
+                        champ_id = item["storeItemId"]
+                        mastery_level = champ_id_to_mastery_level.get(champ_id, 0)
+                        # 7 level -> 0 shards to save (6->1, 5->2, 4->2, 3->2, 2->2, 1->2, 0->2)
+                        shards_to_save = min(7 - mastery_level, 2)
                     else:
-                        save_shards = 2  # mastery 5 and below champ
-                else:
-                    save_shards = 2  # (?) mastery 0 - owned, but never touched
-            else:
-                save_shards = 3  # not owned champ
+                        # not owned champ -> 3 shards to save
+                        shards_to_save = 3
+                case "CHAMPION":  # permanent champion shard
+                    shards_to_save = int(item["itemStatus"] != "OWNED")  # don't own -> need to save one shard.
+                case _:
+                    continue
 
-            disenchant_shards = max(0, item["count"] - save_shards)
+            shards_to_disenchant = max(0, item["count"] - shards_to_save)
 
-            if disenchant_shards:
-                disenchant_req = await connection.request(
-                    "post",
-                    f"/lol-loot/v1/recipes/CHAMPION_RENTAL_disenchant/craft?repeat={disenchant_shards}",
+            if shards_to_disenchant:
+                r = await self.post(
+                    f"/lol-loot/v1/recipes/{item['type']}_disenchant/craft?repeat={shards_to_disenchant}",
                     data=[item["lootName"]],
                 )
+                if r.status == 201:
+                    total_shards_disenchanted += shards_to_disenchant
 
-
-def be_mass_disenchant_button():
-    connector = AluConnector(worker_func)
-    connector.start()
+        result = f"Disenchanted {total_shards_disenchanted} shards"
+        return result
 
 
 if __name__ == "__main__":
-    be_mass_disenchant_button()
+    BEMassDisenchant().start()

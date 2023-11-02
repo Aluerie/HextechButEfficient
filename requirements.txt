@@ -1,4 +1,2 @@
 lcu-driver
-requests
-easygui
-dearpygui
+customtkinter
