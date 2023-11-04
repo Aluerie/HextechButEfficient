@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from .app import HextechButEfficientApp
 
 
-class Scripts(NamedTuple):
+class Script(NamedTuple):
     name: str
     cls: Type[AluConnector]
     image: CTkImage
@@ -100,7 +100,7 @@ class NavigationButton(ctk.CTkButton):
 
 
 class FrameCategory(ctk.CTkFrame):
-    def __init__(self, master: HextechButEfficientApp, button: NavigationButton, *scripts: Scripts):
+    def __init__(self, master: HextechButEfficientApp, button: NavigationButton, *scripts: Script):
         super().__init__(
             master,
             corner_radius=0,

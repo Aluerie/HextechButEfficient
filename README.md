@@ -14,12 +14,11 @@ No more annoying animations, no more chore calculations, no more chore lookups i
 - [🔠 HextechButEfficient](#-hextechbutefficient)
   - [📔 Table of Contents](#-table-of-contents)
   - [📃 List of Scripts](#-list-of-scripts)
-    - [🔵 Efficient BE (Blue Essence) management](#-efficient-be-blue-essence-management)
-    - [🟠 Efficient OE (Orange Essence) management](#-efficient-oe-orange-essence-management)
+    - [🔵 BE (Blue Essence) management](#-be-blue-essence-management)
+    - [🟠 OE (Orange Essence) management](#-oe-orange-essence-management)
     - [🤯 Utilities](#-utilities)
-    - [💎 Skins and Skin Shards related statistics/math](#-skins-and-skin-shards-related-statisticsmath)
+    - [💎 Skins and Skin Shards related statistics](#-skins-and-skin-shards-related-statistics)
     - [⚙️ Backup/Restore Settings](#️-backuprestore-settings)
-    - [🚢 Event Pass](#-event-pass)
     - [🪓 Final Chore minimisation](#-final-chore-minimisation)
   - [🪚 Ideas and Contributions](#-ideas-and-contributions)
   - [👊 Riot Games Approval](#-riot-games-approval)
@@ -33,13 +32,13 @@ The checkmark ☑️ in lists below means script is implemented. If not then it'
 
 For more info about the scripts check out [⚠️ the repository's wiki ⚠️](<https://github.com/Aluerie/HextechButEfficient/wiki>)
 
-### 🔵 Efficient BE (Blue Essence) management
+### 🔵 BE (Blue Essence) management
 
 - [X] Mass-Disenchant Champion Shards accounting for Mastery levels.
 - [ ] Mass-Open BE related loot.
 - [ ] Upgrade Champion Mastery if available.
 
-### 🟠 Efficient OE (Orange Essence) management
+### 🟠 OE (Orange Essence) management
 
 - [ ] Mass-Disenchant everything that gives OE.
 - [ ] Mass-Open OE related loot.
@@ -48,12 +47,13 @@ For more info about the scripts check out [⚠️ the repository's wiki ⚠️](
 
 ### 🤯 Utilities
 
-- [X] Remove Challenges Tokens
-- [X] Set Random Icon
+- [X] Remove Challenge Tokens
+- [X] Set Random Owned Icon
 - [ ] Combine Key Fragments.
+- [ ] Claim all Event Pass rewards.
 - [ ] Remove `isNew` shining (that you need to hover over to remove).
 
-### 💎 Skins and Skin Shards related statistics/math
+### 💎 Skins and Skin Shards related statistics
 
 - [X] Prints statistic about your skin collection. Number of owned/not-owned skins per RP price tier.
 - [X] Same^ for shards loot.
@@ -62,11 +62,6 @@ For more info about the scripts check out [⚠️ the repository's wiki ⚠️](
 
 - [X] Backup settings to `.json` files.
 - [X] Restore settings from `.json` files.
-
-### 🚢 Event Pass
-
-- [ ] Claim all rewards.
-- [ ] Buy all skin orbs with a limit.
 
 ### 🪓 Final Chore minimisation
 

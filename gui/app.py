@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import webbrowser
-
 import customtkinter as ctk
 from PIL import Image
 
@@ -13,7 +11,7 @@ from scripts.oe_management import ZeroSkinShards
 from scripts.skin_shards_stats import SkinCollectionStats, SkinShardsStats
 from scripts.utilities import RemoveChallengeTokens, SetRandomIcon
 
-from .bases import FrameCategory, NavigationButton, Scripts
+from .bases import FrameCategory, NavigationButton, Script
 from .utils import open_git_repo_link, open_git_wiki_link
 
 ctk.set_default_color_theme("./assets/theme/purple.json")
@@ -143,30 +141,30 @@ class HextechButEfficientApp(ctk.CTk):
         self.be_management = FrameCategory(
             self,
             self.be_management_button,
-            Scripts("BE Mass Disenchant", BEMassDisenchant, self.image_icon_image),
+            Script("BE Mass Disenchant\naccounting for Mastery levels", BEMassDisenchant, self.image_icon_image),
         )
 
         # 3 OE MANAGEMENT
         self.oe_management = FrameCategory(
             self,
             self.oe_management_button,
-            Scripts("Show skin shards for champs  without a skin", ZeroSkinShards, self.image_icon_image),
+            Script("Show skin shards for champs  without a skin", ZeroSkinShards, self.image_icon_image),
         )
 
         # 4 SKIN SHARDS STATS
         self.skin_shards_stats = FrameCategory(
             self,
             self.skin_shards_stats_button,
-            Scripts("Skin Shards Stats", SkinShardsStats, self.image_icon_image),
-            Scripts("Skin Collection Stats", SkinCollectionStats, self.image_icon_image),
+            Script("Skin Shards Stats", SkinShardsStats, self.image_icon_image),
+            Script("Skin Collection Stats", SkinCollectionStats, self.image_icon_image),
         )
 
         # 5 UTILITIES
         self.utilities = FrameCategory(
             self,
             self.utilities_button,
-            Scripts("Remove Challenge Tokens", RemoveChallengeTokens, self.image_icon_image),
-            Scripts("Set Random Owned Icon", SetRandomIcon, self.image_icon_image),
+            Script("Remove Challenge Tokens", RemoveChallengeTokens, self.image_icon_image),
+            Script("Set Random Owned Icon", SetRandomIcon, self.image_icon_image),
         )
 
         # select default frame
