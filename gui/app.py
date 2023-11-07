@@ -9,7 +9,7 @@ from scripts.oe_management import ZeroSkinShards
 
 # from scripts.settings_backup import BackupSettings, RestoreSettings
 from scripts.skin_shards_stats import SkinCollectionStats, SkinShardsStats
-from scripts.utilities import RemoveChallengeTokens, SetRandomIcon
+from scripts.utilities import RemoveChallengeTokens, SetRandomIcon, CombineFragmentKeys
 
 from .bases import FrameCategory, NavigationButton, Script
 from .utils import open_git_repo_link, open_git_wiki_link
@@ -165,6 +165,7 @@ class HextechButEfficientApp(ctk.CTk):
             self.utilities_button,
             Script("Remove Challenge Tokens", RemoveChallengeTokens, self.image_icon_image),
             Script("Set Random Owned Icon", SetRandomIcon, self.image_icon_image),
+            Script("Combine Fragment Keys", CombineFragmentKeys, self.image_icon_image),
         )
 
         # select default frame

@@ -49,7 +49,7 @@ For more info about the scripts check out [⚠️ the repository's wiki ⚠️](
 
 - [X] Remove Challenge Tokens
 - [X] Set Random Owned Icon
-- [ ] Combine Key Fragments.
+- [X] Combine Key Fragments.
 - [ ] Claim all Event Pass rewards.
 - [ ] Remove `isNew` shining (that you need to hover over to remove).
 
