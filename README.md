@@ -30,8 +30,6 @@ No more annoying animations, no more chore calculations, no more chore lookups i
 
 The checkmark ☑️ in lists below means script is implemented. If not then it's coming soon™️.
 
-For more info about the scripts check out [⚠️ the repository's wiki ⚠️](<https://github.com/Aluerie/HextechButEfficient/wiki>)
-
 ### 🔵 BE (Blue Essence) management
 
 - [X] Mass-Disenchant Champion Shards accounting for Mastery levels.

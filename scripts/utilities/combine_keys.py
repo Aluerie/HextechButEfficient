@@ -17,7 +17,7 @@ class CombineFragmentKeys(AluConnector):
                     data=["MATERIAL_key_fragment"],  # data=[item["lootId"]]
                 )
 
-                if r_craft.status == 204:
+                if r_craft.status == 200:
                     return f"Successfully combined {repeat} keys"
                 else:
                     return f"Failed to combine keys with {r_craft.status} status"

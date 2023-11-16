@@ -9,10 +9,11 @@ from scripts.oe_management import ZeroSkinShards
 
 # from scripts.settings_backup import BackupSettings, RestoreSettings
 from scripts.skin_shards_stats import SkinCollectionStats, SkinShardsStats
-from scripts.utilities import RemoveChallengeTokens, SetRandomIcon, CombineFragmentKeys
+from scripts.utilities import CombineFragmentKeys, RemoveChallengeTokens, SetRandomIcon
 
-from .bases import FrameCategory, NavigationButton, Script
-from .utils import open_git_repo_link, open_git_wiki_link
+from .const import IMAGE_PATH
+from .elements import FrameCategory, NavigationButton, Script
+from .utils import open_git_repo_link
 
 ctk.set_default_color_theme("./assets/theme/purple.json")
 
@@ -33,22 +34,6 @@ class HextechButEfficientApp(ctk.CTk):
         image_path = "./assets/images/"
         self.sivir_icon = ctk.CTkImage(Image.open(image_path + "sivir_icon.png"), size=(66, 66))
         self.sivir_part_splash = ctk.CTkImage(Image.open(image_path + "sivir_part_splash.png"), size=(415, 175))
-        self.image_icon_image = ctk.CTkImage(Image.open(image_path + "image_icon_light.png"), size=(20, 20))
-        self.home_image = ctk.CTkImage(
-            light_image=Image.open(image_path + "home_dark.png"),
-            dark_image=Image.open(image_path + "home_light.png"),
-            size=(20, 20),
-        )
-        self.chat_image = ctk.CTkImage(
-            light_image=Image.open(image_path + "chat_dark.png"),
-            dark_image=Image.open(image_path + "chat_light.png"),
-            size=(20, 20),
-        )
-        self.add_user_image = ctk.CTkImage(
-            light_image=Image.open(image_path + "add_user_dark.png"),
-            dark_image=Image.open(image_path + "add_user_light.png"),
-            size=(20, 20),
-        )
 
         # create navigation frame
         self.navigation_buttons: list[NavigationButton] = []
@@ -67,11 +52,13 @@ class HextechButEfficientApp(ctk.CTk):
         )
         self.navigation_frame_label.grid(row=0, column=0, padx=5, pady=5)
 
-        self.home_button = NavigationButton(self, row=1, name="Home", image=self.home_image)
-        self.be_management_button = NavigationButton(self, row=2, name="BE Management", image=self.chat_image)
-        self.oe_management_button = NavigationButton(self, row=3, name="OE Management", image=self.chat_image)
-        self.skin_shards_stats_button = NavigationButton(self, row=4, name="Skin Shards Stats", image=self.chat_image)
-        self.utilities_button = NavigationButton(self, row=5, name="Utilities", image=self.add_user_image)
+        self.home_button = NavigationButton(
+            self, row=1, name="Home", image="home_dark.png", dark_image="home_light.png"
+        )
+        self.be_management_button = NavigationButton(self, row=2, name="BE Management", image="BE_icon.png")
+        self.oe_management_button = NavigationButton(self, row=3, name="OE Management", image="OE_icon.png")
+        self.skin_shards_stats_button = NavigationButton(self, row=4, name="Skin/Shard Stats", image="Skins.png")
+        self.utilities_button = NavigationButton(self, row=5, name="Utilities", image="utils.png")
 
         self.appearance_mode_menu = ctk.CTkOptionMenu(
             self.navigation_frame, values=["Dark", "Light"], command=self.change_appearance_mode_event
@@ -88,21 +75,21 @@ class HextechButEfficientApp(ctk.CTk):
         # 1 HOME
         self.home_frame = FrameCategory(self, self.home_button)
         self.home_frame.grid_rowconfigure(5, weight=1)
-        self.home_frame.grid_columnconfigure(2, weight=1)
+        self.home_frame.grid_columnconfigure(1, weight=1)
 
         self.home_frame_large_image_label = ctk.CTkLabel(self.home_frame, text="", image=self.sivir_part_splash)
-        self.home_frame_large_image_label.grid(row=0, column=0, padx=20, pady=10, columnspan=2)
+        self.home_frame_large_image_label.grid(row=0, column=0, padx=20, pady=10)
 
         self.home_title = ctk.CTkTextbox(
             self.home_frame,
             width=500,
-            height=20,
+            height=60,
             bg_color="transparent",
             fg_color="transparent",
-            font=ctk.CTkFont(size=15, weight="bold"),
+            font=ctk.CTkFont(size=17, weight="bold"),
         )
-        self.home_title.insert("0.0", f"Hextech But Efficient, version: {STRING.VERSION}")
-        self.home_title.grid(row=1, column=0, padx=20, pady=10, columnspan=2)
+        self.home_title.insert("0.0", f"Hextech But Efficient\nVersion: {STRING.VERSION}")
+        self.home_title.grid(row=1, column=0, padx=20, pady=10)
         self.home_title.configure(state="disabled")
 
         self.description_text = ctk.CTkTextbox(
@@ -113,59 +100,50 @@ class HextechButEfficientApp(ctk.CTk):
             fg_color="transparent",
             font=ctk.CTkFont(size=13),
         )
-        self.description_text.insert(
-            "0.0",
-            "League of Legends tool for quick & efficient management of some chores.\n"
-            "Check links below to get more info on scripts.",
-        )
-        self.description_text.grid(row=2, column=0, padx=20, pady=10, columnspan=2)
+        self.description_text.insert("0.0", "League of Legends tool for quick & efficient management of some chores.")
+        self.description_text.grid(row=2, column=0, padx=0, pady=0)
         self.description_text.configure(state="disabled")
 
         self.github_button = ctk.CTkButton(
             self.home_frame,
+            width=280,
+            height=56,
             text="GitHub",
-            image=self.image_icon_image,
+            font=ctk.CTkFont(size=17),
+            image=ctk.CTkImage(Image.open(IMAGE_PATH + "git.png"), size=(50, 50)),
             command=open_git_repo_link,
         )
-        self.github_button.grid(row=2, column=0, padx=0, pady=0)
-
-        self.wiki_button = ctk.CTkButton(
-            self.home_frame,
-            text="GitHub Wiki",
-            image=self.image_icon_image,
-            command=open_git_wiki_link,
-        )
-        self.wiki_button.grid(row=2, column=1, padx=20, pady=0)
+        self.github_button.grid(row=2, column=0)
 
         # 2 BE MANAGEMENT
         self.be_management = FrameCategory(
             self,
             self.be_management_button,
-            Script("BE Mass Disenchant\naccounting for Mastery levels", BEMassDisenchant, self.image_icon_image),
+            Script("BE Mass Disenchant\naccounting for Mastery levels", BEMassDisenchant, "git.png"),
         )
 
         # 3 OE MANAGEMENT
         self.oe_management = FrameCategory(
             self,
             self.oe_management_button,
-            Script("Show skin shards for champs  without a skin", ZeroSkinShards, self.image_icon_image),
+            Script("Show skin shards for champs  without a skin", ZeroSkinShards, "git.png"),
         )
 
         # 4 SKIN SHARDS STATS
         self.skin_shards_stats = FrameCategory(
             self,
             self.skin_shards_stats_button,
-            Script("Skin Shards Stats", SkinShardsStats, self.image_icon_image),
-            Script("Skin Collection Stats", SkinCollectionStats, self.image_icon_image),
+            Script("Skin Shards Stats", SkinShardsStats, "git.png"),
+            Script("Skin Collection Stats", SkinCollectionStats, "git.png"),
         )
 
         # 5 UTILITIES
         self.utilities = FrameCategory(
             self,
             self.utilities_button,
-            Script("Remove Challenge Tokens", RemoveChallengeTokens, self.image_icon_image),
-            Script("Set Random Owned Icon", SetRandomIcon, self.image_icon_image),
-            Script("Combine Fragment Keys", CombineFragmentKeys, self.image_icon_image),
+            Script("Remove Challenge Tokens", RemoveChallengeTokens, "git.png"),
+            Script("Set Random Owned Icon", SetRandomIcon, "git.png"),
+            Script("Combine Fragment Keys", CombineFragmentKeys, "Key.png"),
         )
 
         # select default frame

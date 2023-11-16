@@ -17,6 +17,13 @@ log = logging.getLogger(__name__)
 
 
 class SetRandomIcon(AluConnector):
+    """Set Random Owned Icon.
+
+    This will change your league profile icon to a randomly chosen icon from owned ones.
+    
+    It will print numerical id of that icon into the console.
+    """
+
     async def callback(self) -> str:
         r_icons = await self.get("/lol-inventory/v2/inventory/SUMMONER_ICON")
         icon_ids = [icon["itemId"] for icon in await r_icons.json()]
