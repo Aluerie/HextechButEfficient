@@ -20,7 +20,7 @@
             "name": "MAIN GUI",
             "type": "python",
             "request": "launch",
-            "program": "main.py",
+            "program": "__main__.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
