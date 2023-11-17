@@ -1,9 +1,14 @@
-**.ipynb
+# python 
 venv/
-.backup/
-.temp/
-
 **.pyc
 
+# testing notebook 
+**.ipynb
+
+# auto-py-to-exe
 output/
+
+# Folders created by the scripts
 .logs/
+.backup/
+.temp/
