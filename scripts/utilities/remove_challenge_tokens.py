@@ -4,6 +4,13 @@ from common import AluConnector
 
 
 class RemoveChallengeTokens(AluConnector):
+    """Remove Challenge Tokens.
+
+    Challenges are Evil. For some reason in Customize Identity tab you cannot reset your profile state .
+
+    This script does exactly that: reset your challenge tokens to 3 empty slots.
+    """
+
     async def callback(self) -> str:
         r = await self.post("/lol-challenges/v1/update-player-preferences/", data={"challengeIds": []})
         if r.status == 204:

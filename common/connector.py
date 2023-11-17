@@ -20,6 +20,9 @@ class AluConnector(Connector):
     * coroutine `async def callback(self) -> str:`
     which should do the whole work of the supposed script,
     i.e. `be_mass_disenchant.py` it should do the mass disenchanting.
+
+    Also doc-strings of AluConnector subclasses should be written 
+    in user-friendly way since they are going to be shown to them.
     """
 
     if TYPE_CHECKING:

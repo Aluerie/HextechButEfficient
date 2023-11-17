@@ -7,6 +7,20 @@ from common import AluConnector
 
 
 class BackupSettings(AluConnector):
+    """Backup League Settings to a json file.
+
+    *Sometimes* League Client can behave really badly and occasionally it might result in a total wipe out of your settings.
+    It happened to me during my casual playing session so IDK, the need of backup/restore functionality arose.
+
+    This script saves your settings to `.temp/backup` folder:
+    * game-settings.json
+    * input-settings.json
+
+    Which you can restore back with the "Restore Settings from Json" script.
+
+    Note that this script will overwrite current json files in `.temp/backup` folder.
+    """
+
     async def callback(self) -> str:
         result: list[str] = []
         for item in ["game-settings", "input-settings"]:

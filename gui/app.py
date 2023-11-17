@@ -52,13 +52,11 @@ class HextechButEfficientApp(ctk.CTk):
         )
         self.navigation_frame_label.grid(row=0, column=0, padx=5, pady=5)
 
-        self.home_button = NavigationButton(
-            self, row=1, name="Home", image="home_dark.png", dark_image="home_light.png"
-        )
-        self.be_management_button = NavigationButton(self, row=2, name="BE Management", image="BE_icon.png")
-        self.oe_management_button = NavigationButton(self, row=3, name="OE Management", image="OE_icon.png")
-        self.skin_shards_stats_button = NavigationButton(self, row=4, name="Skin/Shard Stats", image="Skins.png")
-        self.utilities_button = NavigationButton(self, row=5, name="Utilities", image="utils.png")
+        self.home_nav = NavigationButton(self, row=1, name="Home", image="home.png")
+        self.be_management_nav = NavigationButton(self, row=2, name="BE Management", image="BE_icon.png")
+        self.oe_management_nav = NavigationButton(self, row=3, name="OE Management", image="OE_icon.png")
+        self.skin_shards_stats_nav = NavigationButton(self, row=4, name="Skin/Shard Stats", image="performing_arts.png")
+        self.utilities_nav = NavigationButton(self, row=5, name="Utilities", image="utils.png")
 
         self.appearance_mode_menu = ctk.CTkOptionMenu(
             self.navigation_frame, values=["Dark", "Light"], command=self.change_appearance_mode_event
@@ -73,7 +71,7 @@ class HextechButEfficientApp(ctk.CTk):
         self.category_frames: list[FrameCategory] = []
 
         # 1 HOME
-        self.home_frame = FrameCategory(self, self.home_button)
+        self.home_frame = FrameCategory(self, self.home_nav)
         self.home_frame.grid_rowconfigure(5, weight=1)
         self.home_frame.grid_columnconfigure(1, weight=1)
 
@@ -110,7 +108,7 @@ class HextechButEfficientApp(ctk.CTk):
             height=56,
             text="GitHub",
             font=ctk.CTkFont(size=17),
-            image=ctk.CTkImage(Image.open(IMAGE_PATH + "git.png"), size=(50, 50)),
+            image=ctk.CTkImage(Image.open(IMAGE_PATH + "github_mark.png"), size=(50, 50)),
             command=open_git_repo_link,
         )
         self.github_button.grid(row=2, column=0)
@@ -118,32 +116,32 @@ class HextechButEfficientApp(ctk.CTk):
         # 2 BE MANAGEMENT
         self.be_management = FrameCategory(
             self,
-            self.be_management_button,
-            Script("BE Mass Disenchant\naccounting for Mastery levels", BEMassDisenchant, "git.png"),
+            self.be_management_nav,
+            Script("BE Mass Disenchant\naccounting for Mastery levels", BEMassDisenchant, "recycling_symbol.png"),
         )
 
         # 3 OE MANAGEMENT
         self.oe_management = FrameCategory(
             self,
-            self.oe_management_button,
-            Script("Show skin shards for champs  without a skin", ZeroSkinShards, "git.png"),
+            self.oe_management_nav,
+            Script("Show skin shards for champs  without a skin", ZeroSkinShards, "keycap_digit_zero.png"),
         )
 
         # 4 SKIN SHARDS STATS
         self.skin_shards_stats = FrameCategory(
             self,
-            self.skin_shards_stats_button,
-            Script("Skin Shards Stats", SkinShardsStats, "git.png"),
-            Script("Skin Collection Stats", SkinCollectionStats, "git.png"),
+            self.skin_shards_stats_nav,
+            Script("Skin Shards Stats", SkinShardsStats, "shark.png"),
+            Script("Skin Collection Stats", SkinCollectionStats, "skis.png"),
         )
 
         # 5 UTILITIES
         self.utilities = FrameCategory(
             self,
-            self.utilities_button,
-            Script("Remove Challenge Tokens", RemoveChallengeTokens, "git.png"),
-            Script("Set Random Owned Icon", SetRandomIcon, "git.png"),
-            Script("Combine Fragment Keys", CombineFragmentKeys, "Key.png"),
+            self.utilities_nav,
+            Script("Remove Challenge Tokens", RemoveChallengeTokens, "no_entry.png"),
+            Script("Set Random Owned Icon", SetRandomIcon, "framed_picture.png"),
+            Script("Combine Fragment Keys", CombineFragmentKeys, "old_key.png"),
         )
 
         # select default frame

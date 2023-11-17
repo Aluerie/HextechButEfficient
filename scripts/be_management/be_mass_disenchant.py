@@ -14,6 +14,25 @@ from common import AluConnector
 
 
 class BEMassDisenchant(AluConnector):
+    """Blue Essence Mass Disenchant accounting for Mastery Levels. 
+
+    This script disenchants champion shards depending on their mastery level.
+    The following logic applies:
+    
+    ## Champion Shards (Usual ones)
+    * Keep N champion shards untouched respectively for ***:
+        * 3 shards - now owned champions
+        * 2 shards - mastery 5 and below
+        * 1 shard - mastery 6 champions
+        * 0 shards - mastery 7 champions
+    * Disenchant all other shards. 
+
+    ## Permanent champion shards (Golden border ones)
+    * Keep 1 shard for unowned champions so you can unlock it.
+    * Disenchant the rest since it's more efficient to wait for a usual champion shard to upgrade the mastery with. 
+
+    Note that this script will disenchant the shards a few moments after you press the "Run" button. Be mindful! 
+    """
     async def callback(self) -> str:
         r_summoner = await self.get("/lol-summoner/v1/current-summoner")
         summoner_id: int = (await r_summoner.json())["summonerId"]
@@ -34,7 +53,7 @@ class BEMassDisenchant(AluConnector):
                     if item["itemStatus"] == "OWNED":
                         champ_id = item["storeItemId"]
                         mastery_level = champ_id_to_mastery_level.get(champ_id, 0)
-                        # 7 level -> 0 shards to save (6->1, 5->2, 4->2, 3->2, 2->2, 1->2, 0->2)
+                        # 7 level -> 0 shards to save (6 level->1, 5->2, 4->2, 3->2, 2->2, 1->2, 0->2)
                         shards_to_save = min(7 - mastery_level, 2)
                     else:
                         # not owned champ -> 3 shards to save

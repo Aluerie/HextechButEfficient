@@ -23,8 +23,8 @@ class SkinShardsStats(AluConnector):
 
         skin_shards = [item for item in player_loot if item["displayCategories"] == "SKIN"]
 
-        # todo: it will fail if we have shard price out of these ranged
-        shard_categories = {k: {"owned": 0, "not_owned": 0} for k in [520, 750, 975, 1350, 1820]}
+        shard_prices = [shard["value"] for shard in skin_shards]
+        shard_categories = {k: {"owned": 0, "not_owned": 0} for k in shard_prices}
 
         for shard in skin_shards:
             if shard["itemStatus"] == "OWNED":

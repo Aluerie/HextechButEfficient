@@ -10,19 +10,23 @@ from common.constants import URL
 
 
 class SkinCollectionStats(AluConnector):
+    """Skin Collection Statistics
+
+    This feature will print out how many skins of each price tier you do/don't own.
+
+    Nerdy statistic that can be used in some Excel calculations about efficient skin collection grind.
+
+    Example output:
+    {390: {'not_owned': 3, 'owned': 0}, ... ,
+     1820: {'not_owned': 67, 'owned': 19}, ... ,
+     'Special': {'not_owned': 67, 'owned': 19}}
+    """
+
     async def callback(self) -> str:
-        """Print a dictionary that shows how many skins of each price tier
-        I own/do not own.
-
-        This information gets pasted into excel spreadsheet for further and more visually appealing math.
-        Example output:
-        >>> {390: {'not_owned': 3, 'owned': 0}, ... 'Special': {'not_owned': 67, 'owned': 19}}
-        """
-
         skinid_rp_mapping = await self.get_skin_to_rp_mapping()
         skinid_owned_mapping = await self.get_skinid_owned_mapping()
 
-        price_categories = {}  # {k: {"owned": 0, "not_owned": 0} for k in [520, 750, 975, 1350, 1820]}
+        price_categories = {}
 
         for skin_id, is_owned in skinid_owned_mapping.items():
             price = skinid_rp_mapping[skin_id]
