@@ -6,7 +6,7 @@ from common import AluConnector
 class RemoveChallengeTokens(AluConnector):
     """Remove Challenge Tokens.
 
-    Challenges are Evil. For some reason in Customize Identity tab you cannot reset your profile state .
+    Challenges are Evil. For some reason in Customize Identity tab you cannot reset your profile state.
 
     This script does exactly that: reset your challenge tokens to 3 empty slots.
     """

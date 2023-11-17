@@ -16,15 +16,15 @@ No more annoying animations, no more chore calculations, no more chore lookups i
   - [📃 List of Scripts](#-list-of-scripts)
     - [🔵 BE (Blue Essence) management](#-be-blue-essence-management)
     - [🟠 OE (Orange Essence) management](#-oe-orange-essence-management)
-    - [🤯 Utilities](#-utilities)
-    - [💎 Skins and Skin Shards related statistics](#-skins-and-skin-shards-related-statistics)
+    - [⚒️ Utilities](#️-utilities)
+    - [🎭 Skins and Skin Shards related statistics](#-skins-and-skin-shards-related-statistics)
     - [⚙️ Backup/Restore Settings](#️-backuprestore-settings)
     - [🪓 Final Chore minimisation](#-final-chore-minimisation)
   - [🪚 Ideas and Contributions](#-ideas-and-contributions)
   - [👊 Riot Games Approval](#-riot-games-approval)
   - [🚫 No Personal Responsibility Disclaimer](#-no-personal-responsibility-disclaimer)
   - [🌗 Last Note](#-last-note)
-  - [🚒 Riot Games Disclaimer](#-riot-games-disclaimer)
+  - [🚒 No Relation to Riot Games Disclaimer](#-no-relation-to-riot-games-disclaimer)
 
 ## 📃 List of Scripts
 
@@ -43,7 +43,7 @@ The checkmark ☑️ in lists below means script is implemented. If not then it'
 - [ ] Waste all OE to upgrade the cheapest skin shards.
 - [X] Show skin shards for champions without a skin.
 
-### 🤯 Utilities
+### ⚒️ Utilities
 
 - [X] Remove Challenge Tokens
 - [X] Set Random Owned Icon
@@ -51,7 +51,7 @@ The checkmark ☑️ in lists below means script is implemented. If not then it'
 - [ ] Claim all Event Pass rewards.
 - [ ] Remove `isNew` shining (that you need to hover over to remove).
 
-### 💎 Skins and Skin Shards related statistics
+### 🎭 Skins and Skin Shards related statistics
 
 - [X] Prints statistic about your skin collection. Number of owned/not-owned skins per RP price tier.
 - [X] Same^ for shards loot.
@@ -83,6 +83,6 @@ I am not to be held responsible for any losses, mistakes and "mistakes", or bugs
 
 Not sure if I like the name `HextechButEfficient` because we have some non-loot scripts too. Not sure if wordplay of famous [HextechButBetter](https://github.com/MaciejGorczyca/HextechButBetter) project is a fine idea too. If you have any suggestions - please, hit me up.
 
-## 🚒 Riot Games Disclaimer
+## 🚒 No Relation to Riot Games Disclaimer
 
 `HextechButEfficient` is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
