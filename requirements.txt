@@ -1,2 +1,2 @@
-lcu-driver
 customtkinter
+lcu-driver
