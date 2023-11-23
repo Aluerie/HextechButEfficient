@@ -72,6 +72,7 @@ class AluConnector(Connector):
         else:
             try:
                 self.console_text = await self.callback()
+                log.info(self.console_text)
             except Exception as exc:
                 if isinstance(exc, CustomException):
                     self.console_text = str(exc)
@@ -85,7 +86,7 @@ class AluConnector(Connector):
     async def disconnect(self, _: Connection):
         log.info("Finished task. The LCU API client have been closed!")
 
-    async def callback(self) -> str:
+    async def callback(self: AluConnector) -> str:
         """This function will be called on @ready event
 
         It is supposed to be implemented by subclasses and do the script job.

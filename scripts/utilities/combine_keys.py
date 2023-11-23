@@ -9,7 +9,7 @@ class CombineFragmentKeys(AluConnector):
     This script will try to combine all possible fragments, i.e. if you have 28 fragments - the script will combine 27 of those into 9 full keys.
     """
 
-    async def callback(self) -> str:
+    async def callback(self: AluConnector) -> str:
         r_loot = await self.get("/lol-loot/v1/player-loot")
         loot = await r_loot.json()
 

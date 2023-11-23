@@ -40,7 +40,7 @@ class BEMassDisenchant(AluConnector):
     The script will show the list of shards to disenchant and then you will be able to confirm/deny the procedure.
     """
 
-    async def callback(self) -> str:
+    async def callback(self: AluConnector) -> str:
         r_summoner = await self.get("/lol-summoner/v1/current-summoner")
         summoner_id: int = (await r_summoner.json())["summonerId"]
 
