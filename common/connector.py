@@ -6,6 +6,10 @@ from typing import TYPE_CHECKING, Any
 
 from lcu_driver import Connector
 
+from gui.confirmation import ConfirmationBox
+
+from .errors import ConfirmationDenied, CustomException
+
 if TYPE_CHECKING:
     from lcu_driver.connection import Connection
 
@@ -13,7 +17,7 @@ log = logging.getLogger(__name__)
 
 
 class AluConnector(Connector):
-    """Aluerie's Connector - 
+    """Aluerie's Connector -
     Subclass to lcu_driver's Connector aimed to reduce size of code and spam of the same codeblocks.
 
     Subclasses of AluConnector are supposed to implement the following functions:
@@ -21,14 +25,14 @@ class AluConnector(Connector):
     which should do the whole work of the supposed script,
     i.e. `be_mass_disenchant.py` it should do the mass disenchanting.
 
-    Also doc-strings of AluConnector subclasses should be written 
+    Also doc-strings of AluConnector subclasses should be written
     in user-friendly way since they are going to be shown to them.
     """
 
     if TYPE_CHECKING:
         connection: Connection
 
-    def __init__(self):
+    def __init__(self, need_confirmation: bool = False):
         # Probable shit-code ahead warning
         # lcu-driver library has a bug/bad design/oversight where
         # on connector.stop() it doesn't properly close the connection/loop
@@ -43,7 +47,8 @@ class AluConnector(Connector):
         # todo: open issue in HextechButEfficient repository
         new_loop = asyncio.new_event_loop()
         super().__init__(loop=new_loop)
-        self.result: str = 'No result yet'
+        self.console_text: str = "No result yet"
+        self.need_confirmation: bool = need_confirmation
 
         # let's continue.
         self._set_event("ready", self.connect)
@@ -58,9 +63,17 @@ class AluConnector(Connector):
             log.warning("Please login into your account and restart the script...")
         else:
             try:
-                self.result = await self.callback()
+                self.console_text = await self.callback()
             except Exception as exc:
-                self.result = f'Failed with exception:\n{exc.__class__.__name__}: {str(exc)}'
+                if isinstance(exc, CustomException):
+                    self.console_text = str(exc)
+                    log.info(exc)
+                else:
+                    self.console_text = (
+                        f"Failed with exception. Contact developers about it:"
+                        f"\n{exc.__class__.__name__}: {str(exc)}"
+                    )
+                    log.error("%s: %s", exc.__class__.__name__, exc, exc_info=True)
 
     async def disconnect(self, _: Connection):
         log.info("Finished task. The LCU API client have been closed!")
@@ -69,8 +82,44 @@ class AluConnector(Connector):
         """This function will be called on @ready event
 
         It is supposed to be implemented by subclasses and do the script job.
+        
+        * For streamlined UI experience callbacks should at some point 
+            call self.confirm or self.output to showcase their results.
+
+        * And it also should return a small descriptive string to print in the GUI console.
         """
         raise NotImplementedError("You need to implement `async def callback(self):` in AluConnector subclasses.")
+
+    def confirm(self, script_message: str) -> bool:
+        """Bring Confirmation dialog that describes what the script gonna do
+
+        This function is made to used in callback body to request confirming loot-sensitive scripts like disenchant.
+        It can be defaulted to skip confirmation if self.need_confirmation is False
+        """
+        log.info(script_message)
+        if not self.need_confirmation:
+            # no confirmation is needed
+            return True
+
+        confirm = ConfirmationBox(script_message).get()
+        if not confirm:
+            # user pressed No, closed the window or etc.
+            raise ConfirmationDenied("Confirmation was not received. Not executing.")
+        else:
+            # user pressed Yes
+            return True
+
+    def output(self, script_message: str):
+        """Bring OK-confirmation dialog that shows the script output to user.
+
+        If the script is not loot-sensitive then we can just show the result of the script.
+        """
+        log.info(script_message)
+        if not self.need_confirmation:
+            # no confirmation is needed
+            return
+
+        ConfirmationBox(script_message, option_no=False)
 
     # SHORTCUTS
 

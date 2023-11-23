@@ -33,7 +33,8 @@ class SkinShardsStats(AluConnector):
                 shard_categories[shard["value"]]["not_owned"] += 1
                 shard_categories[shard["value"]]["owned"] += shard["count"] - 1
 
-        return f"Statistics about your skin shards in the loot tab:\n{pprint.pformat(shard_categories)}"
+        self.output(f"Statistics about your skin shards in the loot tab:\n{pprint.pformat(shard_categories)}")
+        return "Success: Statistic was shown."
 
 
 if __name__ == "__main__":

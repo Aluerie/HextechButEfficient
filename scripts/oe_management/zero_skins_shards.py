@@ -6,7 +6,6 @@ https://gist.github.com/bangingheads/e1e5f6aa9ee9ca74d84edc8874d04a59
 from __future__ import annotations
 
 import aiohttp
-import easygui
 
 from common import AluConnector
 from common.constants import URL
@@ -17,7 +16,7 @@ class ZeroSkinShards(AluConnector):
 
     In other words, show champions with currently 0 owned skins, but you can unlock such with skin shards in the Loot Tab.
 
-    This will not upgrade the skin(-s) shards automatically.
+    This will not upgrade the skin(-s) shards automatically but just show a list of those in a separate dialog.
     """
 
     async def callback(self):
@@ -54,16 +53,20 @@ class ZeroSkinShards(AluConnector):
                     ownership[champ]["unlockable"].append(loot["itemDesc"])
 
         display = ""
+        amount_of_skins = 0
         for key, data in ownership.items():
             if data["owned"] == True and data["skins"] == 0 and len(data["unlockable"]) > 0:
                 display += ddragon["data"][ddragon["keys"][key]]["name"] + "\n" + "\n".join(data["unlockable"]) + "\n\n"
+                amount_of_skins += len(data["unlockable"])
 
         if not display:
             display = (
-                "Seems like, you do not have any champions with 0 skins "
-                "that can unlock any via upgrading skin shards in Loot Tab."
+                "Did not find any skin shards which "
+                "would be the very first skin for their champion in your collection after upgrading."
             )
-        return display
+
+        self.output(display)
+        return f"Found {amount_of_skins} such skins"
 
 
 if __name__ == "__main__":

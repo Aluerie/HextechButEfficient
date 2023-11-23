@@ -11,6 +11,8 @@ from __future__ import annotations
 import logging
 import random
 
+from CTkMessagebox import CTkMessagebox
+
 from common.connector import AluConnector
 
 log = logging.getLogger(__name__)
@@ -20,7 +22,7 @@ class SetRandomIcon(AluConnector):
     """Set Random Owned Icon.
 
     This will change your league profile icon to a randomly chosen icon from owned ones.
-    
+
     It will print numerical id of that icon into the console.
     """
 
@@ -29,13 +31,15 @@ class SetRandomIcon(AluConnector):
         icon_ids = [icon["itemId"] for icon in await r_icons.json()]
 
         icon_id = random.choice(icon_ids)  # = randint(50, 78) # random_chinese_icon
+
+        text = f"Your icon will be changed to the icon with icon_id={icon_id}"
+        self.confirm(text)
+
         r_put = await self.put("/lol-summoner/v1/current-summoner/icon", data={"profileIconId": icon_id})
         if r_put.status == 201:
-            result = f"Icon with Id={icon_id} was set correctly."
+            return f"Icon with Id={icon_id} was set correctly."
         else:
-            result = "Unknown problem, the icon was not set."
-        log.info("%s", result)
-        return result
+            return "Unknown problem, the icon was not set."
 
 
 if __name__ == "__main__":

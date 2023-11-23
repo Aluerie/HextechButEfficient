@@ -64,8 +64,9 @@ class HextechButEfficientApp(ctk.CTk):
         self.appearance_mode_menu.grid(row=6, column=0, padx=20, pady=20, sticky="s")
 
         # Text Box
-        self.console_box = ctk.CTkTextbox(self, width=200, height=200)
+        self.console_box = ctk.CTkTextbox(self, width=200, height=200, wrap="word")
         self.console_box.grid(row=6, column=0, columnspan=4, padx=20, pady=20, sticky="nsew")
+        self.console_box.insert("insert", "HextechButEfficient Console")
         self.console_box.configure(state="disabled")
 
         self.category_frames: list[FrameCategory] = []
@@ -93,12 +94,22 @@ class HextechButEfficientApp(ctk.CTk):
         self.description_text = ctk.CTkTextbox(
             self.home_frame,
             width=500,
-            height=150,
+            height=300,
             bg_color="transparent",
             fg_color="transparent",
             font=ctk.CTkFont(size=13),
         )
-        self.description_text.insert("0.0", "League of Legends tool for quick & efficient management of some chores.")
+        self.description_text.insert(
+            "0.0",
+            (
+                "League of Legends tool for quick & efficient management of some chores.\n\n" 
+                "Tutorial on how to use the tool.\n"
+                "    * Open League Client.\n"
+                "    * Choose a script from the tool to execute.\n"
+                "    * Read information under '?' tooltip.\n"
+                "    * Press 'Run' button."
+            ),
+        )
         self.description_text.grid(row=2, column=0, padx=0, pady=0)
         self.description_text.configure(state="disabled")
 
@@ -106,7 +117,7 @@ class HextechButEfficientApp(ctk.CTk):
             self.home_frame,
             width=280,
             height=56,
-            text="GitHub",
+            text="GitHub (Source Repository)",
             font=ctk.CTkFont(size=17),
             image=ctk.CTkImage(Image.open(IMAGE_PATH + "github_mark.png"), size=(50, 50)),
             command=open_git_repo_link,
@@ -117,7 +128,7 @@ class HextechButEfficientApp(ctk.CTk):
         self.be_management = FrameCategory(
             self,
             self.be_management_nav,
-            Script("BE Mass Disenchant\naccounting for Mastery levels", BEMassDisenchant, "recycling_symbol.png"),
+            Script("BE Mass Disenchant accounting for Mastery levels", BEMassDisenchant, "recycling_symbol.png"),
         )
 
         # 3 OE MANAGEMENT

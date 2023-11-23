@@ -38,7 +38,8 @@ class SkinCollectionStats(AluConnector):
                 price_categories[price]["not_owned"] += int(not is_owned)
 
         # pprint.pprint(price_categories)
-        return f"Statistics about your skin collection:\n{pprint.pformat(price_categories)}"
+        self.output(f"Statistics about your skin collection:\n{pprint.pformat(price_categories)}")
+        return "Success: Statistic was shown."
 
     async def get_skin_to_rp_mapping(self) -> Mapping[int, int | str]:
         """Get mapping `skin_id` -> `price in RP`.

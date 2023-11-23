@@ -8,31 +8,38 @@ respectively to not_owned/5_and_below/6/7 level.
 
 from __future__ import annotations
 
-from typing import Mapping
+from typing import Mapping, NamedTuple
 
 from common import AluConnector
 
 
+class ShardToDisenchant(NamedTuple):
+    name: str
+    type: str
+    count: int
+
+
 class BEMassDisenchant(AluConnector):
-    """Blue Essence Mass Disenchant accounting for Mastery Levels. 
+    """Blue Essence Mass Disenchant accounting for Mastery Levels.
 
     This script disenchants champion shards depending on their mastery level.
     The following logic applies:
-    
+
     ## Champion Shards (Usual ones)
     * Keep N champion shards untouched respectively for ***:
         * 3 shards - now owned champions
         * 2 shards - mastery 5 and below
         * 1 shard - mastery 6 champions
         * 0 shards - mastery 7 champions
-    * Disenchant all other shards. 
+    * Disenchant all other shards.
 
     ## Permanent champion shards (Golden border ones)
     * Keep 1 shard for unowned champions so you can unlock it.
-    * Disenchant the rest since it's more efficient to wait for a usual champion shard to upgrade the mastery with. 
+    * Disenchant the rest since it's more efficient to wait for a usual champion shard to upgrade the mastery with.
 
-    Note that this script will disenchant the shards a few moments after you press the "Run" button. Be mindful! 
+    The script will show the list of shards to disenchant and then you will be able to confirm/deny the procedure.
     """
+
     async def callback(self) -> str:
         r_summoner = await self.get("/lol-summoner/v1/current-summoner")
         summoner_id: int = (await r_summoner.json())["summonerId"]
@@ -46,7 +53,8 @@ class BEMassDisenchant(AluConnector):
         # Loot
         r_loot = await self.get("/lol-loot/v1/player-loot")
 
-        total_shards_disenchanted = 0
+        # gather statistics about the shards to disenchant
+        shards_to_confirm: list[ShardToDisenchant] = []
         for item in await r_loot.json():
             match item["type"]:
                 case "CHAMPION_RENTAL":  # normal "partial" champion shard
@@ -66,15 +74,33 @@ class BEMassDisenchant(AluConnector):
             shards_to_disenchant = max(0, item["count"] - shards_to_save)
 
             if shards_to_disenchant:
-                r = await self.post(
-                    f"/lol-loot/v1/recipes/{item['type']}_disenchant/craft?repeat={shards_to_disenchant}",
-                    data=[item["lootName"]],
+                shards_to_confirm.append(
+                    ShardToDisenchant(
+                        name=item["lootName"],
+                        type=item["type"],
+                        count=shards_to_disenchant,
+                    )
                 )
-                if r.status == 201:
-                    total_shards_disenchanted += shards_to_disenchant
 
-        result = f"Disenchanted {total_shards_disenchanted} shards"
-        return result
+        # Confirm
+        text = "".join([f"{shard.name} - {shard.type}: {shard.count} shards" for shard in shards_to_confirm])
+        if not text:
+            text = "No shards to disenchant."
+        else:
+            text = "The following Champion shards will be disenchanted:\n" + text
+        self.confirm(text)
+
+        # We can finally disenchant
+        total_shards_disenchanted = 0
+        for shard in shards_to_confirm:
+            r = await self.post(
+                f"/lol-loot/v1/recipes/{shard.type}_disenchant/craft?repeat={shard.count}",
+                data=[shard.name],
+            )
+            if r.status == 201:
+                total_shards_disenchanted += shard.count
+
+        return f"Disenchanted {total_shards_disenchanted} shards"
 
 
 if __name__ == "__main__":

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import inspect
-from typing import TYPE_CHECKING, Any, NamedTuple, Optional, Type
+import threading
+import time
+from concurrent.futures.thread import ThreadPoolExecutor
+from typing import TYPE_CHECKING, NamedTuple, Optional, Type
 
 import customtkinter as ctk
-from customtkinter.windows.widgets.image import CTkImage
 from PIL import Image
 
 from .bases import CreateToolTip
@@ -26,7 +28,7 @@ class Script(NamedTuple):
 class ScriptTextBox(ctk.CTkTextbox):
     def __init__(
         self,
-        master: Any,
+        master: FrameCategory,
         name: str,
         *,
         connector_cls: Type[AluConnector],
@@ -40,9 +42,10 @@ class ScriptTextBox(ctk.CTkTextbox):
         self.grid(row=row, column=column, padx=20, pady=10)
         self.configure(state="disabled")
 
-        self.name = name
-        self.connector_cls = connector_cls
-        self.console_box = console_box
+        self.master: FrameCategory = master
+        self.name: str = name
+        self.connector_cls: Type[AluConnector] = connector_cls
+        self.console_box: ctk.CTkTextbox = console_box
 
         self.info_button = ctk.CTkButton(
             self,
@@ -72,19 +75,25 @@ class ScriptTextBox(ctk.CTkTextbox):
         self.run_button.place(in_=self, relx=0.5, rely=0.66, anchor="center")
 
     def update_console_box(self):
+        # idk how to update the cursor - it just does not work
+        # self.master.master.config(cursor="watch")
+        the_prefix = f"\n{get_now_string()} | {self.name} | "
         # notification about pressing the button
         self.console_box.configure(state="normal")
-        self.console_box.insert("insert", f'{get_now_string()} | Starting "{self.name}"\n')
+        self.console_box.insert("insert", f"{the_prefix} Starting")
         self.console_box.configure(state="disabled")
         self.console_box.update()
         self.console_box.see("end")
 
-        connector = self.connector_cls()
+        connector = self.connector_cls(need_confirmation=True)
         connector.start()
+
+        # self.master.master.config(cursor="arrow")  
+        # ^this should be in body of ConfirmationBox as self.master.config(cursor="arrow")
 
         # call the script and print the result
         self.console_box.configure(state="normal")
-        self.console_box.insert("insert", f"{get_now_string()} | {connector.result}\n")
+        self.console_box.insert("insert", f"{the_prefix} {connector.console_text}")
         self.console_box.configure(state="disabled")
         self.console_box.see("end")
 
@@ -130,6 +139,9 @@ class NavigationButton(ctk.CTkButton):
 
 
 class FrameCategory(ctk.CTkFrame):
+    if TYPE_CHECKING:
+        master: HextechButEfficientApp
+
     def __init__(self, master: HextechButEfficientApp, button: NavigationButton, *scripts: Script):
         super().__init__(
             master,
@@ -137,7 +149,7 @@ class FrameCategory(ctk.CTkFrame):
             fg_color="transparent",
         )
         master.category_frames.append(self)
-        self.name = button.name
+        self.name: str = button.name
 
         self.scripts = []
         for index, script in enumerate(scripts):
