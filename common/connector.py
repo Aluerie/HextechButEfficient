@@ -15,6 +15,14 @@ if TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 
+# I'm doing it here so all if __main__ == '__main__': also get logging
+logging.basicConfig(
+    format="{asctime} | {levelname:<7} | {funcName:<30} | {message}",
+    datefmt="%H:%M:%S %d/%m",
+    style="{",
+    level=logging.INFO,
+)
+
 
 class AluConnector(Connector):
     """Aluerie's Connector -
@@ -70,8 +78,7 @@ class AluConnector(Connector):
                     log.info(exc)
                 else:
                     self.console_text = (
-                        f"Failed with exception. Contact developers about it:"
-                        f"\n{exc.__class__.__name__}: {str(exc)}"
+                        f"Failed with exception. Contact developers about it:" f"\n{exc.__class__.__name__}: {str(exc)}"
                     )
                     log.error("%s: %s", exc.__class__.__name__, exc, exc_info=True)
 
@@ -82,8 +89,8 @@ class AluConnector(Connector):
         """This function will be called on @ready event
 
         It is supposed to be implemented by subclasses and do the script job.
-        
-        * For streamlined UI experience callbacks should at some point 
+
+        * For streamlined UI experience callbacks should at some point
             call self.confirm or self.output to showcase their results.
 
         * And it also should return a small descriptive string to print in the GUI console.
