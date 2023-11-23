@@ -94,7 +94,7 @@ class HextechButEfficientApp(ctk.CTk):
         self.description_text = ctk.CTkTextbox(
             self.home_frame,
             width=500,
-            height=300,
+            height=350,
             bg_color="transparent",
             fg_color="transparent",
             font=ctk.CTkFont(size=13),
