@@ -108,6 +108,8 @@ class HextechButEfficientApp(ctk.CTk):
                 "    * Choose a script from the tool to execute.\n"
                 "    * Read information under '?' tooltip.\n"
                 "    * Press 'Run' button."
+                "    * If the script has confirmation/output dialog press Yes/OK/No buttons there."
+                "    * The end. Console should print some success text."
             ),
         )
         self.description_text.grid(row=2, column=0, padx=0, pady=0)
