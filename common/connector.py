@@ -41,22 +41,11 @@ class AluConnector(Connector):
         connection: Connection
 
     def __init__(self, need_confirmation: bool = False):
-        # Probable shit-code ahead warning
-        # lcu-driver library has a bug/bad design/oversight where
-        # on connector.stop() it doesn't properly close the connection/loop
-        # meaning with just `super().__init__()` it won't work on multiple GUI button presses
-        # because the infinite loop from the first button connector is left behind waiting for a web sockets to proc
-        # so one possible solution to this is to register a new loop on each GUI button press
-        # it leaves previous infinitely sleeping event loop untouched though...
-        # if anybody knows better - hit me up, I beg you.
-        # link: https://github.com/Aluerie/HextechButEfficient/issues/2
-
         new_loop = asyncio.new_event_loop()
         super().__init__(loop=new_loop)
         self.console_text: str = "No result yet"
         self.need_confirmation: bool = need_confirmation
 
-        # let's continue.
         self._set_event("ready", self.connect)
         self._set_event("disconnect", self.disconnect)
 
