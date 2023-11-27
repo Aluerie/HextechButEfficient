@@ -11,8 +11,6 @@ from __future__ import annotations
 import logging
 import random
 
-from CTkMessagebox import CTkMessagebox
-
 from common.connector import AluConnector
 
 log = logging.getLogger(__name__)

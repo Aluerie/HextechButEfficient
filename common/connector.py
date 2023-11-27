@@ -49,10 +49,8 @@ class AluConnector(Connector):
         # so one possible solution to this is to register a new loop on each GUI button press
         # it leaves previous infinitely sleeping event loop untouched though...
         # if anybody knows better - hit me up, I beg you.
-        # links:
-        # https://github.com/sousa-andre/lcu-driver/issues/18
-        # https://github.com/sousa-andre/lcu-driver/pull/34
-        # todo: open issue in HextechButEfficient repository
+        # link: https://github.com/Aluerie/HextechButEfficient/issues/2
+
         new_loop = asyncio.new_event_loop()
         super().__init__(loop=new_loop)
         self.console_text: str = "No result yet"

@@ -1,2 +1,7 @@
 customtkinter
 lcu-driver
+Pillow
+
+# customtkinter removed packaging from reqs bcs python 3.12 
+# BUT did NOT remove it from imports in source code X_X
+packaging  
