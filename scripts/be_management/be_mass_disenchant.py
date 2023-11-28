@@ -1,11 +1,3 @@
-"""
-# Mass-Disenchant Champion Shards accounting for Mastery levels.
-
-- [X] keep 3/2/1/0 champion shards depending on their mastery - 
-respectively to not_owned/5_and_below/6/7 level.
-- [ ] Disenchant permanent shards for owned champions.
-"""
-
 from __future__ import annotations
 
 from typing import Mapping, NamedTuple
@@ -14,9 +6,11 @@ from common import AluConnector
 
 
 class ShardToDisenchant(NamedTuple):
-    name: str
+    loot_name: str
     type: str
     count: int
+    display_name: str
+    disenchant_value: int
 
 
 class BEMassDisenchant(AluConnector):
@@ -53,9 +47,10 @@ class BEMassDisenchant(AluConnector):
         # Loot
         r_loot = await self.get("/lol-loot/v1/player-loot")
 
-        # gather statistics about the shards to disenchant
+        # Gather statistics about the shards to disenchant
         shards_to_confirm: list[ShardToDisenchant] = []
         for item in await r_loot.json():
+            extra_display_text = ""
             match item["type"]:
                 case "CHAMPION_RENTAL":  # normal "partial" champion shard
                     if item["itemStatus"] == "OWNED":
@@ -67,6 +62,7 @@ class BEMassDisenchant(AluConnector):
                         # not owned champ -> 3 shards to save
                         shards_to_save = 3
                 case "CHAMPION":  # permanent champion shard
+                    extra_display_text = " Permanent"
                     shards_to_save = int(item["itemStatus"] != "OWNED")  # don't own -> need to save one shard.
                 case _:
                     continue
@@ -76,18 +72,32 @@ class BEMassDisenchant(AluConnector):
             if shards_to_disenchant:
                 shards_to_confirm.append(
                     ShardToDisenchant(
-                        name=item["lootName"],
+                        loot_name=item["lootName"],
                         type=item["type"],
                         count=shards_to_disenchant,
+                        display_name=item["itemDesc"] + extra_display_text,
+                        disenchant_value=item["disenchantValue"],
                     )
                 )
 
         # Confirm
-        text = "".join([f"{shard.name} - {shard.type}: {shard.count} shards" for shard in shards_to_confirm])
+        text = "\n".join(
+            [
+                f"{shard.display_name} - {shard.count} shard(-s) x {shard.disenchant_value} BE"
+                for shard in shards_to_confirm
+            ]
+        )
+        total_be = sum(shard.disenchant_value * shard.count for shard in shards_to_confirm)
         if not text:
             text = "No shards to disenchant."
         else:
-            text = "The following Champion shards will be disenchanted:\n" + text
+            text = (
+                "The following Champion shards will be disenchanted:\n"
+                f"{text}\n"
+                "---\n"
+                f"Total Amount of Blue Essence to gain: {total_be}"
+            )
+
         self.confirm(text)
 
         # We can finally disenchant
@@ -95,9 +105,9 @@ class BEMassDisenchant(AluConnector):
         for shard in shards_to_confirm:
             r = await self.post(
                 f"/lol-loot/v1/recipes/{shard.type}_disenchant/craft?repeat={shard.count}",
-                data=[shard.name],
+                data=[shard.loot_name],
             )
-            if r.status == 201:
+            if r.status == 200:
                 total_shards_disenchanted += shard.count
 
         return f"Disenchanted {total_shards_disenchanted} shards"
@@ -105,3 +115,47 @@ class BEMassDisenchant(AluConnector):
 
 if __name__ == "__main__":
     BEMassDisenchant().start()
+
+
+""" 
+A scheme of item in 
+"for item in await r_loot.json():"
+
+Just so I don't need to do extra print(item) when I want to change something.
+{
+    "asset": "",
+    "count": 1,
+    "disenchantLootName": "CURRENCY_champion",
+    "disenchantRecipeName": "CHAMPION_RENTAL_disenchant",
+    "disenchantValue": 960,
+    "displayCategories": "CHAMPION",
+    "expiryTime": -1,
+    "isNew": False,
+    "isRental": True,
+    "itemDesc": "Kayle",  # /* cspell: disable-line */
+    "itemStatus": "OWNED",
+    "localizedDescription": "",
+    "localizedName": "",
+    "localizedRecipeSubtitle": "",
+    "localizedRecipeTitle": "",
+    "lootId": "CHAMPION_RENTAL_10",
+    "lootName": "CHAMPION_RENTAL_10",
+    "parentItemStatus": "NONE",
+    "parentStoreItemId": -1,
+    "rarity": "DEFAULT",
+    "redeemableStatus": "ALREADY_OWNED",
+    "refId": "",
+    "rentalGames": 0,
+    "rentalSeconds": 604800,
+    "shadowPath": "",
+    "splashPath": "/lol-game-data/assets/v1/champion-splashes/10/10000.jpg",
+    "storeItemId": 10,
+    "tags": "",
+    "tilePath": "/lol-game-data/assets/v1/champion-tiles/10/10000.jpg",
+    "type": "CHAMPION_RENTAL",
+    "upgradeEssenceName": "CURRENCY_champion",
+    "upgradeEssenceValue": 2880,
+    "upgradeLootName": "CHAMPION_10",
+    "value": 4800,
+}
+"""
