@@ -21,7 +21,6 @@ No more annoying animations, no more chore calculations, no more chore lookups i
     - [⚙️ Backup/Restore Settings](#️-backuprestore-settings)
     - [🪓 Final Chore minimisation](#-final-chore-minimisation)
   - [🪚 Ideas and Contributions](#-ideas-and-contributions)
-  - [🌗 Last Note](#-last-note)
   - [👊 Riot Games Approval](#-riot-games-approval)
   - [🚫 No Personal Responsibility Disclaimer](#-no-personal-responsibility-disclaimer)
   - [🚒 No Relation to Riot Games Disclaimer](#-no-relation-to-riot-games-disclaimer)
@@ -69,19 +68,17 @@ The checkmark ☑️ in lists below means script is implemented. If not then it'
 
 Feel free to make contributions, reach me with your ideas and suggestions, report bugs, etc.
 
-## 🌗 Last Note
-
-Not sure if I like the name `HextechButEfficient` because we have some non-loot scripts too. Not sure if wordplay of famous [HextechButBetter](https://github.com/MaciejGorczyca/HextechButBetter) project is a fine idea too. If you have any suggestions - please, hit me up.
-
 ## 👊 Riot Games Approval
 
-Sorry, I'm yet to send a request for approval.
+This app has been approved by Riot!
 
-Either way, it's more of a formality, you will not get banned for using this tool/scripts. Many similar applications that also use LCU API with different purposes already exist and have no problems. Honourable mention: [HextechButBetter](https://github.com/MaciejGorczyca/HextechButBetter) repository.
+![Alt text](assets/readme/approved.png)
+
+That means, you will not be banned for using the tool. Either way, many already existing applications: like Mobalytics/Blitz or Open Source ones - honourable mention [HextechButBetter](https://github.com/MaciejGorczyca/HextechButBetter) (yes, the name of this repository is a reference to it 🙂 ) use LCU API for different purposes without any problems.
 
 ## 🚫 No Personal Responsibility Disclaimer
 
-I am not to be held responsible for any losses, mistakes and "mistakes", or bugs that can lead to unfortunate situations. Use/modify my scripts on your own risk. Well, I mean, they should be fine, but still, if anything happens - I won't be able to refund those shards back or something.
+Despite section above, I am not to be held responsible for any losses, mistakes and "mistakes", or bugs that can lead to unfortunate situations. Use/modify my scripts on your own risk. Well, I mean, they should be fine, but still, if anything happens - I won't be able to refund those shards back or something.
 
 ## 🚒 No Relation to Riot Games Disclaimer
 

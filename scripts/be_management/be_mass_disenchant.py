@@ -120,6 +120,7 @@ if __name__ == "__main__":
 """ 
 A scheme of item in 
 "for item in await r_loot.json():"
+case "CHAMPION_RENTAL"
 
 Just so I don't need to do extra print(item) when I want to change something.
 {
