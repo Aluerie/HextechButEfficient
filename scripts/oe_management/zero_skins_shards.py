@@ -1,5 +1,5 @@
 """
-## Credits to the orignal source:
+## Credits to the original source:
 * bangingheads gist
 https://gist.github.com/bangingheads/e1e5f6aa9ee9ca74d84edc8874d04a59
 """
@@ -8,7 +8,6 @@ from __future__ import annotations
 import aiohttp
 
 from common import AluConnector
-from common.constants import URL
 
 
 class ZeroSkinShards(AluConnector):
@@ -21,10 +20,12 @@ class ZeroSkinShards(AluConnector):
 
     async def callback(self):
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"{URL.DDRAGON}/api/versions.json") as response:
+            version_url = "https://ddragon.leagueoflegends.com/api/versions.json"
+            async with session.get(version_url) as response:
                 version = (await response.json())[0]
 
-            async with session.get(f"{URL.DDRAGON}/cdn/{version}/data/en_US/championFull.json") as response:
+            ddragon_url = f"https://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/championFull.json"
+            async with session.get(ddragon_url) as response:
                 ddragon = await response.json()
                 champs = ddragon["keys"]
 

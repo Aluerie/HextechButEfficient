@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from common import AluConnector
-from scripts.be_management import BEMassDisenchant
-from scripts.utilities import CombineFragmentKeys
-
 import logging
+
+from common import AluConnector
+from scripts.be_management import BEMassDisenchant, BEMassOpening
+from scripts.utilities import CombineFragmentKeys
 
 log = logging.getLogger(__name__)
 
@@ -15,10 +15,17 @@ class TheChore(AluConnector):
     """
 
     async def callback(self: AluConnector) -> str:
-        r1 = await BEMassDisenchant.callback(self)
-        log.info(r1)
-        r2 = await CombineFragmentKeys.callback(self)
-        log.info(r2)
+        script_list = (
+            BEMassOpening,
+            BEMassDisenchant,
+            CombineFragmentKeys,
+        )
+        for cls in script_list:
+            # hmm not sure how to do the type hinting magic here
+            # currently I just spam `callback(self: AluConnector)`
+            # in all classes which is kinda a lie
+            script_result = await cls.callback(self)
+            log.info(script_result)
 
         return "Chore is finished"
 

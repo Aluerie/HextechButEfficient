@@ -6,8 +6,8 @@ from common import AluConnector
 
 
 class ShardToDisenchant(NamedTuple):
-    loot_name: str
     type: str
+    loot_id: str
     count: int
     display_name: str
     disenchant_value: int
@@ -72,8 +72,8 @@ class BEMassDisenchant(AluConnector):
             if shards_to_disenchant:
                 shards_to_confirm.append(
                     ShardToDisenchant(
-                        loot_name=item["lootName"],
-                        type=item["type"],
+                        type=item['type'],
+                        loot_id=item["lootId"],
                         count=shards_to_disenchant,
                         display_name=item["itemDesc"] + extra_display_text,
                         disenchant_value=item["disenchantValue"],
@@ -105,9 +105,9 @@ class BEMassDisenchant(AluConnector):
         for shard in shards_to_confirm:
             r = await self.post(
                 f"/lol-loot/v1/recipes/{shard.type}_disenchant/craft?repeat={shard.count}",
-                data=[shard.loot_name],
+                data=[shard.loot_id],
             )
-            if r.status == 200:
+            if r.ok:
                 total_shards_disenchanted += shard.count
 
         return f"Disenchanted {total_shards_disenchanted} shards"

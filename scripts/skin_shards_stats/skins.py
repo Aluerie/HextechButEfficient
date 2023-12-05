@@ -6,7 +6,6 @@ from typing import Mapping
 import aiohttp
 
 from common import AluConnector
-from common.constants import URL
 
 
 class SkinCollectionStats(AluConnector):
@@ -57,8 +56,9 @@ class SkinCollectionStats(AluConnector):
         """
         skin_to_rp: Mapping[int, int | str] = {}
 
+        url = "https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json"
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"{URL.MERAKI}/riot/lol/resources/latest/en-US/champions.json") as resp:
+            async with session.get(url) as resp:
                 champ_json = await resp.json()
 
         for champ_data in champ_json.values():

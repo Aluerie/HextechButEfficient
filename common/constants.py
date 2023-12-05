@@ -12,11 +12,5 @@ class ConstantsMeta(type):
         raise RuntimeError(f"Constant <{attr}> cannot be deleted.")
 
 
-class URL(StrEnum):
-    # remember that urls here do not have finishing slash "/"
-    DDRAGON = "https://ddragon.leagueoflegends.com"
-    MERAKI = "https://cdn.merakianalytics.com"
-
-
 class STRING(StrEnum):
     VERSION = "0.3.0"
