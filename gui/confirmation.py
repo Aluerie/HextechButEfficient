@@ -10,6 +10,8 @@ However, we don't need most of features from CTkMessagebox extension so it's jus
 """
 
 
+import platform
+
 import customtkinter as ctk
 from PIL import Image
 
@@ -46,7 +48,19 @@ class ConfirmationBox(ctk.CTkToplevel):
         )
         self.question.grid(row=1, column=0, columnspan=6, sticky="nwes")
 
-        self.script_info = ctk.CTkTextbox(self, width=500, height=400, wrap="word")
+        # why custom font stuff is so weird x_x
+        match platform.system():
+            case "Windows":
+                font = ctk.CTkFont("Consolas")
+            case "Linux":
+                font = ctk.CTkFont("courier")
+            case "MacOS":
+                font = ctk.CTkFont("Monaco")
+            case _:
+                font = ctk.CTkFont("Courier")
+
+        self.script_info = ctk.CTkTextbox(self, width=500, height=400, wrap="word", font=font)
+
         self.script_info.insert("0.0", f"{script_message}")
         self.script_info.grid(row=2, column=0, columnspan=6, sticky="nwes")
         self.script_info.configure(state="disabled")

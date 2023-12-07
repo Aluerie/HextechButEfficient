@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import pprint
-from typing import Mapping
+from typing import Any, Mapping
 
 import aiohttp
 
-from common import AluConnector
+from common import AluConnector, TabularData
 
 
 class SkinCollectionStats(AluConnector):
@@ -15,20 +14,33 @@ class SkinCollectionStats(AluConnector):
 
     Nerdy statistic that can be used in some Excel calculations about efficient skin collection grind.
 
-    Example output:
-    {390: {'not_owned': 3, 'owned': 0}, ... ,
-     1820: {'not_owned': 67, 'owned': 19}, ... ,
-     'Special': {'not_owned': 67, 'owned': 19}}
+    The script will output a table with price categories which are
+    * RP prices ranging from 390 RP till 3250 RP
+    * Not Loot Eligible skins
+    * Special Price skins which are mostly Event skins, Mythic Essence skins, Prestige skins.
+    * Unknown Price skins which unfortunately we couldn't get the price data about.
     """
 
+    def __init__(self, need_confirmation: bool = False):
+        super().__init__(need_confirmation)
+        self.skins_minimal: list[dict[str, Any]] = []
+
     async def callback(self) -> str:
-        skinid_rp_mapping = await self.get_skin_to_rp_mapping()
-        skinid_owned_mapping = await self.get_skinid_owned_mapping()
+        await self.set_skins_minimal()
+        price_by_skin_id = await self.get_price_by_skin_id()
+        is_owned_by_skin_id = await self.get_is_owned_by_skin_id()
 
         price_categories = {}
 
-        for skin_id, is_owned in skinid_owned_mapping.items():
-            price = skinid_rp_mapping[skin_id]
+        no_price_data_skins: list[int] = []
+
+        for skin_id, is_owned in is_owned_by_skin_id.items():
+            price = price_by_skin_id.get(skin_id, None)
+            if not price:
+                # most likely some meraki json problem
+                # i.e. when Hwei data was not available 2 days after his release
+                price = "Unknown"
+                no_price_data_skins.append(skin_id)
 
             if price not in price_categories:
                 price_categories[price] = {"owned": int(is_owned), "not_owned": int(not is_owned)}
@@ -36,11 +48,23 @@ class SkinCollectionStats(AluConnector):
                 price_categories[price]["owned"] += int(is_owned)
                 price_categories[price]["not_owned"] += int(not is_owned)
 
-        # pprint.pprint(price_categories)
-        self.output(f"Statistics about your skin collection:\n{pprint.pformat(price_categories)}")
+        table = TabularData()
+        table.set_columns(["Price", "NotOwned", "Owned"])
+        for price in sorted(price_categories.keys(), key=lambda x: (not x.isnumeric(), int(x) if x.isnumeric() else x)):
+            price_dict = price_categories[price]
+            table.add_row([price, price_dict["not_owned"], price_dict["owned"]])
+
+        text = f"Statistics about your skin collection:\n{table.render()}"
+        if no_price_data_skins:
+            text += "\n\nThe skins under 'Unknown Price' category are:\n"
+            name_by_skin_id = await self.get_name_by_skin_id()
+            text += "\n".join([f"* {name_by_skin_id[id_]}" for id_ in no_price_data_skins])
+        self.output(text)
         return "Success: Statistic was shown."
 
-    async def get_skin_to_rp_mapping(self) -> Mapping[int, int | str]:
+    # MERAKI CDN
+
+    async def get_price_by_skin_id(self) -> Mapping[int, str]:
         """Get mapping `skin_id` -> `price in RP`.
         So we know general price stats about all league skins.
 
@@ -51,15 +75,19 @@ class SkinCollectionStats(AluConnector):
         Some skin prices are marked as 'Special' - it usually means the skin comes as
         Prestige/Mythic or some other edge-cases.
 
-        There is also a situation about skins that are not Loot Eligible. Their price marked as 'yNoLootEligible'
+        There is also a situation about skins that are not Loot Eligible. Their price marked as 'NoLootEligible'
         The mapping also includes Upcoming skins.
         """
-        skin_to_rp: Mapping[int, int | str] = {}
+
+        price_by_skin_id: Mapping[int, str] = {}
 
         url = "https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json"
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 champ_json = await resp.json()
+
+        # print([i["name"] for i in champ_json["Camille"]["skins"]])
+        # print(champ_json.keys())
 
         for champ_data in champ_json.values():
             for skin in champ_data["skins"]:
@@ -67,31 +95,43 @@ class SkinCollectionStats(AluConnector):
                     continue
 
                 if not skin["lootEligible"]:
-                    # "yNoLootEligible" - "y" just so it's after 'Special' in alphabet sort
-                    skin_to_rp[skin["id"]] = "yNoLootEligible"
+                    price_by_skin_id[skin["id"]] = "NoLootEligible"
                 else:
-                    skin_to_rp[skin["id"]] = skin["cost"]
+                    price_by_skin_id[skin["id"]] = str(skin["cost"])
 
-        return skin_to_rp
+        return price_by_skin_id
 
-    async def get_skinid_owned_mapping(self) -> Mapping[int, bool]:
+    # LCU API PART
+    async def set_skins_minimal(self) -> None:
+        """Get skins minimal dict from LCU API.
+
+        Used to make mappings is_owned_by_skin_id, name_by_skin_id, ...
+        """
+        r_summoner = await self.get("/lol-summoner/v1/current-summoner")
+        summoner_id: int = (await r_summoner.json())["summonerId"]
+
+        r_skins = await self.get(f"/lol-champions/v1/inventories/{summoner_id}/skins-minimal")
+        self.skins_minimal = await r_skins.json()
+
+    async def get_is_owned_by_skin_id(self) -> Mapping[int, bool]:
         """Get mapping `skin_id` -> `is_owned`
         So we can know what skins we own/do not own.
 
         Example output:
         >>> {1001: False, 1002: True, ... 101012: True, ...}
         """
-        r_summoner = await self.get("/lol-summoner/v1/current-summoner")
-        summoner_id: int = (await r_summoner.json())["summonerId"]
 
-        r_skins = await self.get(f"/lol-champions/v1/inventories/{summoner_id}/skins-minimal")
-        skins_minimal = await r_skins.json()
+        return {skin["id"]: skin["ownership"]["owned"] for skin in self.skins_minimal if not skin["isBase"]}
 
-        skin_id_to_is_owned: Mapping[int, bool] = {
-            skin["id"]: skin["ownership"]["owned"] for skin in skins_minimal if not skin["isBase"]
-        }
+    async def get_name_by_skin_id(self) -> Mapping[int, str]:
+        """Get mapping `skin_id` -> `skin_name`
+        So we can know what skins we own/do not own.
 
-        return skin_id_to_is_owned
+        Example output:
+        >>> {1001: 'Goth Annie', 1002: 'Red Riding Annie', ... 950001: 'Soul Fighter Naafiri', ...}
+        """
+
+        return {skin["id"]: skin["name"] for skin in self.skins_minimal if not skin["isBase"]}
 
 
 if __name__ == "__main__":

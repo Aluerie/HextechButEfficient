@@ -32,7 +32,7 @@ The checkmark ☑️ in lists below means script is implemented. If not then it'
 ### 🔵 BE (Blue Essence) management
 
 - [X] Mass-Disenchant Champion Shards accounting for Mastery levels.
-- [ ] Mass-Open BE related loot.
+- [X] Mass-Open BE related loot.
 - [ ] Upgrade Champion Mastery if available.
 
 ### 🟠 OE (Orange Essence) management

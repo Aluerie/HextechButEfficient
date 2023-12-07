@@ -50,12 +50,6 @@ async def get_be_mass_opening_dict() -> Mapping[str, str]:
         if not loot_string.startswith("loot_name_chest"):
             continue
         elif any([word in translation for word in loot_names_to_look_for]):
-            if translation in (
-                "Glorious Champion Capsule",
-                "Champion Capsule",
-                "Basic Champion Capsule",
-            ):
-                continue
             loot_id = loot_string.replace("loot_name_", "").upper()
 
             be_chest_dict[loot_id] = translation
