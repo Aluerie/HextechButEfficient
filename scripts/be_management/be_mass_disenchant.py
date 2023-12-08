@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Mapping, NamedTuple
 
-from common import AluConnector
+from common import AluConnector, TabularData
 
 
 class ShardToDisenchant(NamedTuple):
@@ -17,7 +17,9 @@ class BEMassDisenchant(AluConnector):
     """Blue Essence Mass Disenchant accounting for Mastery Levels.
 
     This script disenchants champion shards depending on their mastery level.
-    The following logic applies:
+    The motivation is that long-term it's better to upgrade the champion mastery with Basic Champion Shard option over 2400 BE/Permanent.
+    Thus, we keep just enough shards to upgrade mastery/unlock champions and disenchant the rest.
+    In details, the following logic applies:
 
     ## Champion Shards (Usual ones)
     * Keep N champion shards untouched respectively for ***:
@@ -72,7 +74,7 @@ class BEMassDisenchant(AluConnector):
             if shards_to_disenchant:
                 shards_to_confirm.append(
                     ShardToDisenchant(
-                        type=item['type'],
+                        type=item["type"],
                         loot_id=item["lootId"],
                         count=shards_to_disenchant,
                         display_name=item["itemDesc"] + extra_display_text,
@@ -81,24 +83,20 @@ class BEMassDisenchant(AluConnector):
                 )
 
         # Confirm
-        text = "\n".join(
-            [
-                f"{shard.display_name} - {shard.count} shard(-s) x {shard.disenchant_value} BE"
-                for shard in shards_to_confirm
-            ]
-        )
-        total_be = sum(shard.disenchant_value * shard.count for shard in shards_to_confirm)
-        if not text:
+        if not shards_to_confirm:
             text = "No shards to disenchant."
+            self.output(text)
         else:
-            text = (
-                "The following Champion shards will be disenchanted:\n"
-                f"{text}\n"
-                "---\n"
-                f"Total Amount of Blue Essence to gain: {total_be}"
-            )
+            text = "The following Champion shards will be disenchanted:\n"
+            table = TabularData()
+            table.set_columns(["Shard Name", "Amount", "BE Value"])
+            rows = [(shard.display_name, shard.count, shard.disenchant_value) for shard in shards_to_confirm]
+            table.add_rows(rows)
+            text += table.render()
+            total_be = sum(shard.disenchant_value * shard.count for shard in shards_to_confirm)
+            text += f"\nTotal Amount of Blue Essence to gain: {total_be}"
 
-        self.confirm(text)
+            self.confirm(text)
 
         # We can finally disenchant
         total_shards_disenchanted = 0

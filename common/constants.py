@@ -13,4 +13,4 @@ class ConstantsMeta(type):
 
 
 class STRING(StrEnum):
-    VERSION = "0.4.0"
+    VERSION = "0.4.1"

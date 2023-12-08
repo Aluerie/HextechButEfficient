@@ -4,7 +4,7 @@ from typing import Mapping, NamedTuple
 
 import aiohttp
 
-from common import AluConnector
+from common import AluConnector, TabularData
 
 __all__ = ("BEMassOpening",)
 
@@ -43,7 +43,7 @@ async def get_be_mass_opening_dict() -> Mapping[str, str]:
         "Honor Level 3 Capsule",
         "Honor Level 4 Capsule",
         "Honor Level 5 Capsule",
-        "Hextech Mystery Champion",
+        # "Hextech Mystery Champion",
     )
 
     for loot_string, translation in trans_json.items():
@@ -65,7 +65,6 @@ class BEMassOpening(AluConnector):
     * Glorious Champion Capsules
     * Honour Level 3, 4, 5 Orbs
     * Honour Level 3, 4, 5 Capsules
-    * Hextech Mystery Champion
 
     Permanent Champion Shards will not be touched because it's better to open them manually when new champions get released since it will just give a random unowned champion
 
@@ -89,12 +88,17 @@ class BEMassOpening(AluConnector):
                 )
 
         # Confirm
-        text = "\n".join([f"{chest.display_name} - x{chest.count}" for chest in chests_to_open])
-        if not text:
+        if not chests_to_open:
             text = "No chests to open"
+            self.output(text)
         else:
-            text = "The Following Chests will be opened:\n" f"{text}"
-        self.confirm(text)
+            text = "The Following Chests will be opened:\n"
+            table = TabularData()
+            table.set_columns(['Chest', 'Amount'])
+            rows = [(chest.display_name, chest.count) for chest in chests_to_open]
+            table.add_rows(rows)
+            text += table.render()
+            self.confirm(text)
 
         total_chests_opened = 0
         for chest in chests_to_open:
