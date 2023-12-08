@@ -7,7 +7,7 @@ League of Legends [LCU API](<https://riot-api-libraries.readthedocs.io/en/latest
 
 No more annoying animations, no more chore calculations, no more chore lookups in other tab like "do I have mastery 7 on that champ?". Say "No more" to any inefficiency.
 
-![Alt text](assets/readme/gui_preview.png)
+![Alt text](extra_assets/readme/gui_preview.png)
 
 ## 📔 Table of Contents
 
@@ -72,7 +72,7 @@ Feel free to make contributions, reach me with your ideas and suggestions, repor
 
 This app has been approved by Riot!
 
-![Alt text](assets/readme/approved.png)
+![Alt text](extra_assets/readme/approved.png)
 
 That means, you will not be banned for using the tool. Either way, many already existing applications: like Mobalytics/Blitz or Open Source ones - honourable mention [HextechButBetter](https://github.com/MaciejGorczyca/HextechButBetter) (yes, the name of this repository is a reference to it 🙂 ) use LCU API for different purposes without any problems.
 
