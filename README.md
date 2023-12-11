@@ -80,6 +80,8 @@ That means, you will not be banned for using the tool. Either way, many already 
 
 Despite section above, I am not to be held responsible for any losses, mistakes and "mistakes", or bugs that can lead to unfortunate situations. Use/modify my scripts on your own risk. Well, I mean, they should be fine, but still, if anything happens - I won't be able to refund those shards back or something.
 
+Also, check out [LICENSE](./LICENSE) for more information about liability and warranty.
+
 ## 🚒 No Relation to Riot Games Disclaimer
 
 `HextechButEfficient` is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
