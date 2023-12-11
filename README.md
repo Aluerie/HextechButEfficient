@@ -2,7 +2,7 @@
 
 League of Legends [LCU API](<https://riot-api-libraries.readthedocs.io/en/latest/lcu.html>) scripts for quick &amp; efficient management of some chores in a min-max style.
 
-> **Note**
+> [!NOTE]
 > You can use GUI from [Release App](https://github.com/Aluerie/HextechButEfficient/releases) as well as run yourself `main.py` or separate scripts from the folder `scripts/` yourself.
 
 No more annoying animations, no more chore calculations, no more chore lookups in other tab like "do I have mastery 7 on that champ?". Say "No more" to any inefficiency.
