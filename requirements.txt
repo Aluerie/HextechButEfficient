@@ -1,3 +1,9 @@
+--extra-index-url https://pip.twitchio.dev 
+# extra index because lcu-driver depends on aiohttp which depends on multidict
+# which does not have built wheels for python3.12 
+# however thanks to umbra for providing them at the index above 
+# so I dont need to install c++ tools myself
+
 customtkinter
 lcu-driver
 Pillow
