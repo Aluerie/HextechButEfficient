@@ -6,6 +6,7 @@ from PIL import Image
 from common.constants import STRING
 from scripts.be_management import BEMassDisenchant, BEMassOpening
 from scripts.oe_management import ZeroSkinShards
+
 # from scripts.settings_backup import BackupSettings, RestoreSettings
 from scripts.skin_shards_stats import SkinCollectionStats, SkinShardsStats
 from scripts.utilities import CombineFragmentKeys, RemoveChallengeTokens, SetRandomIcon
@@ -101,7 +102,7 @@ class HextechButEfficientApp(ctk.CTk):
         self.description_text.insert(
             "0.0",
             (
-                "League of Legends tool for quick & efficient management of some chores.\n\n" 
+                "League of Legends tool for quick & efficient management of some chores.\n\n"
                 "Tutorial on how to use the tool.\n"
                 "    * Open League Client.\n"
                 "    * Choose a script from the tool to execute.\n"
@@ -130,7 +131,7 @@ class HextechButEfficientApp(ctk.CTk):
             self,
             self.be_management_nav,
             Script("BE Mass Disenchant accounting for Mastery levels", BEMassDisenchant, "recycling_symbol.png"),
-            Script("BE Related Loot Mass Opening", BEMassOpening, "door.png")
+            Script("BE Related Loot Mass Opening", BEMassOpening, "door.png"),
         )
 
         # 3 OE MANAGEMENT

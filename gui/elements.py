@@ -88,7 +88,7 @@ class ScriptTextBox(ctk.CTkTextbox):
         connector = self.connector_cls(need_confirmation=True)
         connector.start()
 
-        # self.master.master.config(cursor="arrow")  
+        # self.master.master.config(cursor="arrow")
         # ^this should be in body of ConfirmationBox as self.master.config(cursor="arrow")
 
         # call the script and print the result
