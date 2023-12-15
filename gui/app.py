@@ -6,6 +6,7 @@ from PIL import Image
 from common.constants import STRING
 from scripts.be_management import BEMassDisenchant, BEMassOpening, BEMassDisenchantEverything
 from scripts.oe_management import ZeroSkinShards
+
 # from scripts.settings_backup import BackupSettings, RestoreSettings
 from scripts.skin_shards_stats import SkinCollectionStats, SkinShardsStats
 from scripts.utilities import CombineFragmentKeys, RemoveChallengeTokens, SetRandomIcon
@@ -101,7 +102,7 @@ class HextechButEfficientApp(ctk.CTk):
         self.description_text.insert(
             "0.0",
             (
-                "League of Legends tool for quick & efficient management of some chores.\n\n" 
+                "League of Legends tool for quick & efficient management of some chores.\n\n"
                 "Tutorial on how to use the tool.\n"
                 "    * Open League Client.\n"
                 "    * Choose a script from the tool to execute.\n"

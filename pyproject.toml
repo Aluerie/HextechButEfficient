@@ -1,0 +1,13 @@
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+combine_star = true
+line_length = 120
+
+[tool.pyright]
+pythonVersion = "3.12.1"
+typeCheckingMode = "basic"
+exclude = ["**/__pycache__", "build", "dist"]
