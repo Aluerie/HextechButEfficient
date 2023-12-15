@@ -30,9 +30,11 @@ class BEMassDisenchantEverything(AluConnector):
         for item in await r_loot.json():
             extra_display_text = ""
             match item["type"]:
+                case "CHAMPION_RENTAL":
+                    pass
                 case "CHAMPION": # permanent champion shard
                     extra_display_text = " Permanent"
-                case _:
+                case _: # skip non-champion shard items
                     continue
             
             shards_to_disenchant = max(0, item["count"])
@@ -50,7 +52,7 @@ class BEMassDisenchantEverything(AluConnector):
         
         # Confirm
         if not shards_to_confirm:
-            text = "No shards to disnechant."
+            text = "No shards to disenchant."
             self.output(text)
         else:
             text = "The following Champion shards will be disenchanted:\n"
