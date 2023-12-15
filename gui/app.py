@@ -4,7 +4,7 @@ import customtkinter as ctk
 from PIL import Image
 
 from common.constants import STRING
-from scripts.be_management import BEMassDisenchant, BEMassOpening
+from scripts.be_management import BEMassDisenchant, BEMassOpening, BEMassDisenchantEverything
 from scripts.oe_management import ZeroSkinShards
 # from scripts.settings_backup import BackupSettings, RestoreSettings
 from scripts.skin_shards_stats import SkinCollectionStats, SkinShardsStats
@@ -130,7 +130,8 @@ class HextechButEfficientApp(ctk.CTk):
             self,
             self.be_management_nav,
             Script("BE Mass Disenchant accounting for Mastery levels", BEMassDisenchant, "recycling_symbol.png"),
-            Script("BE Related Loot Mass Opening", BEMassOpening, "door.png")
+            Script("BE Related Loot Mass Opening", BEMassOpening, "door.png"),
+            Script("BE Mass Disenchant everything", BEMassDisenchantEverything, "recycling_symbol.png")
         )
 
         # 3 OE MANAGEMENT
