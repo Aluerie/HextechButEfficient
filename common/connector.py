@@ -73,7 +73,7 @@ class AluConnector(Connector):
     async def disconnect(self, _: Connection):
         log.info("Finished task. The LCU API client have been closed!")
 
-    async def callback(self: AluConnector) -> str:
+    async def callback(self) -> str:
         """This function will be called on @ready event
 
         It is supposed to be implemented by subclasses and do the script job.

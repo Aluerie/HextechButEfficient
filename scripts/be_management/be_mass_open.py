@@ -71,7 +71,7 @@ class BEMassOpening(AluConnector):
     The script will show confirmation prompt with a list of chests to open.
     """
 
-    async def callback(self: AluConnector) -> str:
+    async def callback(self) -> str:
         be_chest_dict = await get_be_mass_opening_dict()
 
         r_loot = await self.get("/lol-loot/v1/player-loot")

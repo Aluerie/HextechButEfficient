@@ -14,7 +14,7 @@ class TheChore(AluConnector):
     This gathers all chores that I personally would love to do in just one click.
     """
 
-    async def callback(self: AluConnector) -> str:
+    async def callback(self) -> str:
         script_list = (
             BEMassOpening,
             BEMassDisenchant,
