@@ -17,27 +17,21 @@ class BEDisenchantEverything(BaseBEDisenchant):
 
         # Gather statistics of the shards to disenchant :>
         shards_to_confirm: list[ShardToDisenchant] = []
+
+        extra_word_mapping = {"CHAMPION_RENTAL": "", "CHAMPION": " Permanent"}
         for item in await r_loot.json():
-            match item["type"]:
-                case "CHAMPION_RENTAL":
-                    extra_display_text = ""
-                case "CHAMPION":  # permanent champion shard
-                    extra_display_text = " Permanent"
-                case _:  # skip non-champion shard items
-                    continue
+            if item["type"] not in extra_word_mapping.keys():  # (Partial, Permanent)
+                continue
 
-            shards_to_disenchant = max(0, item["count"])
-
-            if shards_to_disenchant:
-                shards_to_confirm.append(
-                    ShardToDisenchant(
-                        type=item["type"],
-                        loot_id=item["lootId"],
-                        count=shards_to_disenchant,
-                        display_name=item["itemDesc"] + extra_display_text,
-                        disenchant_value=item["disenchantValue"],
-                    )
+            shards_to_confirm.append(
+                ShardToDisenchant(
+                    type=item["type"],
+                    loot_id=item["lootId"],
+                    count=item["count"],
+                    display_name=item["itemDesc"] + extra_word_mapping[item["type"]],
+                    disenchant_value=item["disenchantValue"],
                 )
+            )
         return shards_to_confirm
 
 
