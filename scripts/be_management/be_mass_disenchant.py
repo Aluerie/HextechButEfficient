@@ -85,19 +85,14 @@ class BEMassDisenchant(BaseBEDisenchant):
 
     async def get_shards_to_confirm(self) -> list[ShardToDisenchant]:
         # Champion ID - Mastery Level Mapping
-        r_summoner = await self.get("/lol-summoner/v1/current-summoner")
-        summoner_id: int = (await r_summoner.json())["summonerId"]
-
-        r_mastery = await self.get(f"/lol-collections/v1/inventories/{summoner_id}/champion-mastery")
         champ_id_to_mastery_level: Mapping[int, int] = {
-            item["championId"]: item["championLevel"] for item in await r_mastery.json()
+            item["championId"]: item["championLevel"]
+            for item in await self.get_lol_collections_v1_inventories_champion_mastery()
         }
 
         # Loot
-        r_loot = await self.get("/lol-loot/v1/player-loot")
-
         shards_to_confirm: list[ShardToDisenchant] = []
-        for item in await r_loot.json():
+        for item in await self.get_lol_loot_v1_player_loot():
             match item["type"]:
                 case "CHAMPION_RENTAL":  # normal "partial" champion shard
                     extra_display_text = ""
@@ -132,48 +127,3 @@ class BEMassDisenchant(BaseBEDisenchant):
 
 if __name__ == "__main__":
     BEMassDisenchant().start()
-
-
-""" 
-A scheme of item in 
-"for item in await r_loot.json():"
-case "CHAMPION_RENTAL"
-
-Just so I don't need to do extra print(item) when I want to change something.
-{
-    "asset": "",
-    "count": 1,
-    "disenchantLootName": "CURRENCY_champion",
-    "disenchantRecipeName": "CHAMPION_RENTAL_disenchant",
-    "disenchantValue": 960,
-    "displayCategories": "CHAMPION",
-    "expiryTime": -1,
-    "isNew": False,
-    "isRental": True,
-    "itemDesc": "Kayle",  # /* cspell: disable-line */
-    "itemStatus": "OWNED",
-    "localizedDescription": "",
-    "localizedName": "",
-    "localizedRecipeSubtitle": "",
-    "localizedRecipeTitle": "",
-    "lootId": "CHAMPION_RENTAL_10",
-    "lootName": "CHAMPION_RENTAL_10",
-    "parentItemStatus": "NONE",
-    "parentStoreItemId": -1,
-    "rarity": "DEFAULT",
-    "redeemableStatus": "ALREADY_OWNED",
-    "refId": "",
-    "rentalGames": 0,
-    "rentalSeconds": 604800,
-    "shadowPath": "",
-    "splashPath": "/lol-game-data/assets/v1/champion-splashes/10/10000.jpg",
-    "storeItemId": 10,
-    "tags": "",
-    "tilePath": "/lol-game-data/assets/v1/champion-tiles/10/10000.jpg",
-    "type": "CHAMPION_RENTAL",
-    "upgradeEssenceName": "CURRENCY_champion",
-    "upgradeEssenceValue": 2880,
-    "upgradeLootName": "CHAMPION_10",
-    "value": 4800,
-}
-"""

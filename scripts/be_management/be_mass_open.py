@@ -25,6 +25,11 @@ async def get_be_mass_opening_dict() -> Mapping[str, str]:
     # for the whole loot, but it is 100k+ lines of json :D
     # this is why we just use the translation json
 
+    # Another note is that unfortunately LCU API is kinda useless in this
+    # most of localisation data is '' in here, everything is empty except 'CHEST_129'
+    # So not really helpful, can't even get to know what is what without experiments.
+    # So I guess gotta use community dragon resources.
+
     url = "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-loot/global/en_us/trans.json"
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
@@ -74,10 +79,8 @@ class BEMassOpening(AluConnector):
     async def callback(self) -> str:
         be_chest_dict = await get_be_mass_opening_dict()
 
-        r_loot = await self.get("/lol-loot/v1/player-loot")
-
         chests_to_open: list[ChestToOpen] = []
-        for item in await r_loot.json():
+        for item in await self.get_lol_loot_v1_player_loot():
             if item["lootId"] in be_chest_dict.keys():
                 chests_to_open.append(
                     ChestToOpen(
@@ -94,7 +97,7 @@ class BEMassOpening(AluConnector):
         else:
             text = "The Following Chests will be opened:\n"
             table = TabularData()
-            table.set_columns(['Chest', 'Amount'])
+            table.set_columns(["Chest", "Amount"])
             rows = [(chest.display_name, chest.count) for chest in chests_to_open]
             table.add_rows(rows)
             text += table.render()
@@ -114,48 +117,3 @@ class BEMassOpening(AluConnector):
 
 if __name__ == "__main__":
     BEMassOpening().start()
-
-
-"""
-The Schema of chests dictionary
-
-This is Glorious Champion capsule. And unfortunately everything is empty except 'CHEST_129'
-So not really helpful, can't even get to know what is what without experiments.
-So I guess gotta use community dragon resources.
-{
-    "asset": "",
-    "count": 2,
-    "disenchantLootName": "",
-    "disenchantRecipeName": "",
-    "disenchantValue": 0,
-    "displayCategories": "CHEST",
-    "expiryTime": -1,
-    "isNew": False,
-    "isRental": False,
-    "itemDesc": "",
-    "itemStatus": "NONE",
-    "localizedDescription": "",
-    "localizedName": "",
-    "localizedRecipeSubtitle": "",
-    "localizedRecipeTitle": "",
-    "lootId": "CHEST_129",
-    "lootName": "CHEST_129",
-    "parentItemStatus": "NONE",
-    "parentStoreItemId": -1,
-    "rarity": "DEFAULT",
-    "redeemableStatus": "NOT_REDEEMABLE",
-    "refId": "",
-    "rentalGames": 0,
-    "rentalSeconds": 0,
-    "shadowPath": "",
-    "splashPath": "/fe/lol-loot/assets/loot_item_icons/chest_129.png",
-    "storeItemId": 129,
-    "tags": "",
-    "tilePath": "/fe/lol-loot/assets/loot_item_icons/chest_129.png",
-    "type": "CHEST",
-    "upgradeEssenceName": "",
-    "upgradeEssenceValue": 0,
-    "upgradeLootName": "",
-    "value": 0,
-}
-"""

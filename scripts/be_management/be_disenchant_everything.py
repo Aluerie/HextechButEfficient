@@ -13,13 +13,11 @@ class BEDisenchantEverything(BaseBEDisenchant):
     """
 
     async def get_shards_to_confirm(self) -> list[ShardToDisenchant]:
-        r_loot = await self.get("/lol-loot/v1/player-loot")
-
         # Gather statistics of the shards to disenchant :>
         shards_to_confirm: list[ShardToDisenchant] = []
 
         extra_word_mapping = {"CHAMPION_RENTAL": "", "CHAMPION": " Permanent"}
-        for item in await r_loot.json():
+        for item in await self.get_lol_loot_v1_player_loot():
             if item["type"] not in extra_word_mapping.keys():  # (Partial, Permanent)
                 continue
 

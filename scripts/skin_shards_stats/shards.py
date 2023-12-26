@@ -24,10 +24,7 @@ class SkinShardsStats(AluConnector):
     """
 
     async def callback(self) -> str:
-        r = await self.get("/lol-loot/v1/player-loot")
-        player_loot: dict = await r.json()
-
-        skin_shards = [item for item in player_loot if item["displayCategories"] == "SKIN"]
+        skin_shards = [item for item in await self.get_lol_loot_v1_player_loot() if item["displayCategories"] == "SKIN"]
 
         shard_prices = [shard["value"] for shard in skin_shards]
         shard_categories: dict[int, ShardCategory] = {k: {"owned": 0, "not_owned": 0} for k in shard_prices}
@@ -43,7 +40,7 @@ class SkinShardsStats(AluConnector):
         table.set_columns(["Price", "NotOwned", "Owned"])
         for price in sorted(shard_categories):
             category = shard_categories[price]
-            row = [str(price), category['not_owned'], category["owned"]]
+            row = [str(price), category["not_owned"], category["owned"]]
             table.add_row(row)
         self.output(f"Statistics about your skin shards in the loot tab:\n{table.render()}")
         return "Success: Statistic was shown."

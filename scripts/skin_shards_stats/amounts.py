@@ -1,82 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Mapping, Optional, TypedDict
-
-import aiohttp
+from typing import TYPE_CHECKING, TypedDict
 
 from common import AluConnector, TabularData
 
 if TYPE_CHECKING:
-    # Somewhat unnecessary over cooked type-hinting
-    # might be outdated in no time too
-    # last updated 26 December 2023
 
-    # /lol-champions/v1/inventories/{summoner_id}/skins-minimal
-    class Rental(TypedDict):
-        endDate: int
-        purchaseDate: int
-        rented: bool
-        winCountRemaining: int
-
-    class Ownership(TypedDict):
-        loyaltyReward: bool
-        owned: bool
-        rental: Rental
-        xboxGPReward: bool
-
-    class MinimalSkin(TypedDict):
-        championId: int
-        chromaPath: Optional[str]
-        disabled: bool
-        id: int
-        isBase: bool
-        lastSelected: bool
-        name: str
-        ownership: Ownership
-        splashPath: str  # "/lol-game-data/assets/v1/champion-splashes/1/1000.jpg"
-        stillObtainable: bool
-        tilePath: str  # "/lol-game-data/assets/v1/champion-tiles/1/1000.jpg"
-
-    # "/lol-loot/v1/player-loot" - ["displayCategories"] == "SKIN"
-    # fmt: off
-    class LootSkin(TypedDict):
-        asset: str                      # ""
-        count: int                      # 1
-        disenchantLootName: str         # "CURRENCY_cosmetic",
-        disenchantRecipeName: str       # "SKIN_RENTAL_disenchant",
-        disenchantValue: int            # 364,
-        displayCategories: int          # "SKIN",
-        expiryTime: int                 # -1,
-        isNew: bool                     # False
-        isRental: bool                  # True
-        itemDesc: str                   # "Dragon Trainer Heimerdinger",
-        itemStatus: str                 # "NONE",
-        localizedDescription: str       # "",
-        localizedName: str              # "",
-        localizedRecipeSubtitle: str    # "",
-        localizedRecipeTitle: str       # "",
-        lootId: str                     # "CHAMPION_SKIN_RENTAL_74006",
-        lootName: str                   # "CHAMPION_SKIN_RENTAL_74006",
-        parentItemStatus: str           # "OWNED",
-        parentStoreItemId: int          # 74,
-        rarity: str                     # "LEGENDARY",
-        redeemableStatus: str           # "REDEEMABLE_RENTAL",
-        refId: str                      # "",
-        rentalGames: int                # 0,
-        rentalSeconds: int              # 604800,
-        shadowPath: str                 # "",
-        splashPath: str                 # "/lol-game-data/assets/v1/champion-splashes/74/74006.jpg",
-        storeItemId: int                # 74006,
-        tags: str                       # "Mage,Mid,Top,legacy,piltover,rarity_legendary"
-        tilePath: str                   # "/lol-game-data/assets/v1/champion-tiles/74/74006.jpg"
-        type: str                       # "SKIN_RENTAL",
-        upgradeEssenceName: str         # "CURRENCY_cosmetic"
-        upgradeEssenceValue: int        # 1520
-        upgradeLootName: str            # "CHAMPION_SKIN_74006"
-        value: int                      # 1820
-    # fmt: on
-
-    # my own table dict
     class ChampionDict(TypedDict):
         name: str
         skins_amount: int
@@ -100,10 +29,7 @@ class ChampionSkinAmountStats(AluConnector):
 
     async def callback(self) -> str:
         # skins data
-        r_summoner = await self.get("/lol-summoner/v1/current-summoner")
-        summoner_id: int = (await r_summoner.json())["summonerId"]
-        r_skins = await self.get(f"/lol-champions/v1/inventories/{summoner_id}/skins-minimal")
-        skins_minimal: list[MinimalSkin] = await r_skins.json()
+        skins_minimal = await self.get_lol_champions_v1_inventories_skins_minimal()
 
         table_dict: dict[int, ChampionDict] = {}
         for skin in skins_minimal:
@@ -122,12 +48,10 @@ class ChampionSkinAmountStats(AluConnector):
                 table_dict[champion_id]["skins_amount"] += int(skin["ownership"]["owned"])
 
         # loot data
-        r_loot = await self.get("/lol-loot/v1/player-loot")
-        for loot in await r_loot.json():
-            if loot["displayCategories"] == "SKIN":
-                loot: LootSkin
-                champion_id = loot["parentStoreItemId"]
-                table_dict[champion_id]["unowned_skin_shards"] += int(loot["itemStatus"] != "OWNED")
+        for item in await self.get_lol_loot_v1_player_loot():
+            if item["displayCategories"] == "SKIN":
+                champion_id = item["parentStoreItemId"]
+                table_dict[champion_id]["unowned_skin_shards"] += int(item["itemStatus"] != "OWNED")
 
         # sort by amount of skins
         table_dict = {

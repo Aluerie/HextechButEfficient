@@ -13,6 +13,8 @@ from .errors import ConfirmationDenied, CustomException
 if TYPE_CHECKING:
     from lcu_driver.connection import Connection
 
+    from .schemas import *
+
 log = logging.getLogger(__name__)
 
 # I'm doing it here so all if __main__ == '__main__': also get logging
@@ -39,6 +41,7 @@ class AluConnector(Connector):
 
     if TYPE_CHECKING:
         connection: Connection
+        summoner_id: int  # used in many requests so let's keep it close
 
     def __init__(self, need_confirmation: bool = False):
         new_loop = asyncio.new_event_loop()
@@ -52,12 +55,13 @@ class AluConnector(Connector):
     async def connect(self, _: Connection):
         log.info("LCU API is connected")
 
-        summoner = await self.get("/lol-summoner/v1/current-summoner")
-        if summoner.status != 200:
+        r_summoner = await self.get("/lol-summoner/v1/current-summoner")
+        if r_summoner.status != 200:
             # silly check if league is not down
             log.warning("Please login into your account and restart the script...")
         else:
             try:
+                self.summoner_id: int = (await r_summoner.json())["summonerId"]
                 self.console_text = await self.callback()
                 log.info(self.console_text)
             except Exception as exc:
@@ -142,3 +146,20 @@ class AluConnector(Connector):
         """Shortcut: perform PUT request against LCU API."""
         log.debug("PUT %s %s", endpoint, kwargs or "")
         return await self.connection.request("put", endpoint, **kwargs)
+
+    # LCU API WRAPPER LIKE TYPING FRIENDLY REQUESTS
+
+    async def get_lol_champions_v1_inventories_skins_minimal(self) -> list[MinimalSkin]:
+        """Get skins minimal."""
+        r_skins = await self.get(f"/lol-champions/v1/inventories/{self.summoner_id}/skins-minimal")
+        return await r_skins.json()
+
+    async def get_lol_loot_v1_player_loot(self) -> list[LootItem]:
+        """Get player loot."""
+        r_loot = await self.get("/lol-loot/v1/player-loot")
+        return await r_loot.json()
+
+    async def get_lol_collections_v1_inventories_champion_mastery(self) -> list[ChampionMastery]:
+        """Get champion mastery."""
+        r_mastery = await self.get(f"/lol-collections/v1/inventories/{self.summoner_id}/champion-mastery")
+        return await r_mastery.json()

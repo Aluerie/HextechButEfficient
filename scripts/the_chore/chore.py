@@ -21,10 +21,7 @@ class TheChore(AluConnector):
             CombineFragmentKeys,
         )
         for cls in script_list:
-            # hmm not sure how to do the type hinting magic here
-            # currently I just spam `callback(self: AluConnector)`
-            # in all classes which is kinda a lie
-            script_result = await cls.callback(self)
+            script_result = await cls.callback(self)  # type: ignore # idk bro
             log.info(script_result)
 
         return "Chore is finished"

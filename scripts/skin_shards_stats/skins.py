@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Mapping
+from typing import TYPE_CHECKING, Mapping
 
 import aiohttp
 
 from common import AluConnector, TabularData
+
+if TYPE_CHECKING:
+    from common.schemas import MinimalSkin
 
 
 class SkinCollectionStats(AluConnector):
@@ -21,14 +24,10 @@ class SkinCollectionStats(AluConnector):
     * Unknown Price skins which unfortunately we couldn't get the price data about.
     """
 
-    def __init__(self, need_confirmation: bool = False):
-        super().__init__(need_confirmation)
-        self.skins_minimal: list[dict[str, Any]] = []
-
     async def callback(self) -> str:
-        await self.set_skins_minimal()
+        skins_minimal = await self.get_lol_champions_v1_inventories_skins_minimal()
         price_by_skin_id = await self.get_price_by_skin_id()
-        is_owned_by_skin_id = await self.get_is_owned_by_skin_id()
+        is_owned_by_skin_id = await self.get_is_owned_by_skin_id(skins_minimal)
 
         price_categories = {}
 
@@ -57,7 +56,7 @@ class SkinCollectionStats(AluConnector):
         text = f"Statistics about your skin collection:\n{table.render()}"
         if no_price_data_skins:
             text += "\n\nThe skins under 'Unknown Price' category are:\n"
-            name_by_skin_id = await self.get_name_by_skin_id()
+            name_by_skin_id = await self.get_name_by_skin_id(skins_minimal)
             text += "\n".join([f"* {name_by_skin_id[id_]}" for id_ in no_price_data_skins])
         self.output(text)
         return "Success: Statistic was shown."
@@ -101,19 +100,8 @@ class SkinCollectionStats(AluConnector):
 
         return price_by_skin_id
 
-    # LCU API PART
-    async def set_skins_minimal(self) -> None:
-        """Get skins minimal dict from LCU API.
-
-        Used to make mappings is_owned_by_skin_id, name_by_skin_id, ...
-        """
-        r_summoner = await self.get("/lol-summoner/v1/current-summoner")
-        summoner_id: int = (await r_summoner.json())["summonerId"]
-
-        r_skins = await self.get(f"/lol-champions/v1/inventories/{summoner_id}/skins-minimal")
-        self.skins_minimal = await r_skins.json()
-
-    async def get_is_owned_by_skin_id(self) -> Mapping[int, bool]:
+    @staticmethod
+    async def get_is_owned_by_skin_id(skins_minimal: list[MinimalSkin]) -> Mapping[int, bool]:
         """Get mapping `skin_id` -> `is_owned`
         So we can know what skins we own/do not own.
 
@@ -121,9 +109,10 @@ class SkinCollectionStats(AluConnector):
         >>> {1001: False, 1002: True, ... 101012: True, ...}
         """
 
-        return {skin["id"]: skin["ownership"]["owned"] for skin in self.skins_minimal if not skin["isBase"]}
+        return {skin["id"]: skin["ownership"]["owned"] for skin in skins_minimal if not skin["isBase"]}
 
-    async def get_name_by_skin_id(self) -> Mapping[int, str]:
+    @staticmethod
+    async def get_name_by_skin_id(skins_minimal: list[MinimalSkin]) -> Mapping[int, str]:
         """Get mapping `skin_id` -> `skin_name`
         So we can know what skins we own/do not own.
 
@@ -131,7 +120,7 @@ class SkinCollectionStats(AluConnector):
         >>> {1001: 'Goth Annie', 1002: 'Red Riding Annie', ... 950001: 'Soul Fighter Naafiri', ...}
         """
 
-        return {skin["id"]: skin["name"] for skin in self.skins_minimal if not skin["isBase"]}
+        return {skin["id"]: skin["name"] for skin in skins_minimal if not skin["isBase"]}
 
 
 if __name__ == "__main__":
