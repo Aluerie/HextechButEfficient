@@ -1,8 +1,14 @@
 from __future__ import annotations
 
-import pprint
+from typing import TYPE_CHECKING, TypedDict
 
-from common import AluConnector
+from common import AluConnector, TabularData
+
+if TYPE_CHECKING:
+
+    class ShardCategory(TypedDict):
+        owned: int
+        not_owned: int
 
 
 class SkinShardsStats(AluConnector):
@@ -24,7 +30,7 @@ class SkinShardsStats(AluConnector):
         skin_shards = [item for item in player_loot if item["displayCategories"] == "SKIN"]
 
         shard_prices = [shard["value"] for shard in skin_shards]
-        shard_categories = {k: {"owned": 0, "not_owned": 0} for k in shard_prices}
+        shard_categories: dict[int, ShardCategory] = {k: {"owned": 0, "not_owned": 0} for k in shard_prices}
 
         for shard in skin_shards:
             if shard["itemStatus"] == "OWNED":
@@ -33,7 +39,13 @@ class SkinShardsStats(AluConnector):
                 shard_categories[shard["value"]]["not_owned"] += 1
                 shard_categories[shard["value"]]["owned"] += shard["count"] - 1
 
-        self.output(f"Statistics about your skin shards in the loot tab:\n{pprint.pformat(shard_categories)}")
+        table = TabularData()
+        table.set_columns(["Price", "NotOwned", "Owned"])
+        for price in sorted(shard_categories):
+            category = shard_categories[price]
+            row = [str(price), category['not_owned'], category["owned"]]
+            table.add_row(row)
+        self.output(f"Statistics about your skin shards in the loot tab:\n{table.render()}")
         return "Success: Statistic was shown."
 
 
