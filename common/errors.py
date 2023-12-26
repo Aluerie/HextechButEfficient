@@ -21,3 +21,13 @@ class ConfirmationDenied(CustomException):
     """Confirmation was not received."""
 
     __slots__: tuple[str, ...] = ()
+
+
+class NotLoggedIn(CustomException):
+    """User is not logged in.
+
+    Sometimes the LCU API is ready but looks like user is not YET logged in, so we need to raise this.
+    Also can happen when league is dead.
+    """
+
+    __slots__: tuple[str, ...] = ()

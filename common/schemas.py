@@ -94,4 +94,32 @@ class ChampionMastery(TypedDict):
     tokensEarned: int                           # 0,
 
 
+# /lol-summoner/v1/current-summoner
+class RerollPoints(TypedDict):
+    currentPoints: int          # 500,
+    maxRolls: int               # 2,
+    numberOfRolls: int          # 2,
+    pointsCostToRoll: int       # 250,
+    pointsToReroll: int         # 0,
+
+
+class CurrentSummoner(TypedDict):
+    accountId: int                      # 1995474734002688,
+    displayName: str                    # "Aluerie",
+    gameName: str                       # "Aluerie",
+    internalName: str                   # "Aluerie",
+    nameChangeFlag: bool                # False,
+    percentCompleteForNextLevel: int    # 77,
+    privacy: str                        # "PUBLIC",
+    profileIconId: int                  # 5914,
+    puuid: str                          # "ef550652-6f19-508f-b6bd-00886efde891",
+    rerollPoints: RerollPoints
+    summonerId: int                     # 114548842,
+    summonerLevel: int                  # 599,
+    tagLine: str                        # "Alu",
+    unnamed: bool                       # False,
+    xpSinceLastLevel: int               # 2822,
+    xpUntilNextLevel: int               # 3648,
+
+
 # fmt: on

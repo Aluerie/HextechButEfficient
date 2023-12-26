@@ -8,12 +8,12 @@ from lcu_driver import Connector
 
 from gui.confirmation import ConfirmationBox
 
-from .errors import ConfirmationDenied, CustomException
+from . import errors
 
 if TYPE_CHECKING:
     from lcu_driver.connection import Connection
 
-    from .schemas import *
+    from . import schemas
 
 log = logging.getLogger(__name__)
 
@@ -55,24 +55,19 @@ class AluConnector(Connector):
     async def connect(self, _: Connection):
         log.info("LCU API is connected")
 
-        r_summoner = await self.get("/lol-summoner/v1/current-summoner")
-        if r_summoner.status != 200:
-            # silly check if league is not down
-            log.warning("Please login into your account and restart the script...")
-        else:
-            try:
-                self.summoner_id: int = (await r_summoner.json())["summonerId"]
-                self.console_text = await self.callback()
-                log.info(self.console_text)
-            except Exception as exc:
-                if isinstance(exc, CustomException):
-                    self.console_text = str(exc)
-                    log.info(exc)
-                else:
-                    self.console_text = (
-                        f"Failed with exception. Contact developers about it:" f"\n{exc.__class__.__name__}: {str(exc)}"
-                    )
-                    log.error("%s: %s", exc.__class__.__name__, exc, exc_info=True)
+        try:
+            self.summoner_id: int = (await self.get_lol_summoner_v1_current_summoner())["summonerId"]
+            self.console_text = await self.callback()
+            log.info(self.console_text)
+        except Exception as exc:
+            if isinstance(exc, errors.CustomException):
+                self.console_text = str(exc)
+                log.error(exc)
+            else:
+                self.console_text = (
+                    f"Failed with exception. Contact developers about it:" f"\n{exc.__class__.__name__}: {str(exc)}"
+                )
+                log.error("%s: %s", exc.__class__.__name__, exc, exc_info=True)
 
     async def disconnect(self, _: Connection):
         log.info("Finished task. The LCU API client have been closed!")
@@ -103,7 +98,7 @@ class AluConnector(Connector):
         confirm = ConfirmationBox(script_message).get()
         if not confirm:
             # user pressed No, closed the window or etc.
-            raise ConfirmationDenied("Confirmation was not received. Not executing.")
+            raise errors.ConfirmationDenied("Confirmation was not received. Not executing.")
         else:
             # user pressed Yes
             return True
@@ -149,17 +144,30 @@ class AluConnector(Connector):
 
     # LCU API WRAPPER LIKE TYPING FRIENDLY REQUESTS
 
-    async def get_lol_champions_v1_inventories_skins_minimal(self) -> list[MinimalSkin]:
+    async def get_lol_champions_v1_inventories_skins_minimal(self) -> list[schemas.MinimalSkin]:
         """Get skins minimal."""
         r_skins = await self.get(f"/lol-champions/v1/inventories/{self.summoner_id}/skins-minimal")
         return await r_skins.json()
 
-    async def get_lol_loot_v1_player_loot(self) -> list[LootItem]:
+    async def get_lol_loot_v1_player_loot(self) -> list[schemas.LootItem]:
         """Get player loot."""
         r_loot = await self.get("/lol-loot/v1/player-loot")
         return await r_loot.json()
 
-    async def get_lol_collections_v1_inventories_champion_mastery(self) -> list[ChampionMastery]:
+    async def get_lol_collections_v1_inventories_champion_mastery(self) -> list[schemas.ChampionMastery]:
         """Get champion mastery."""
         r_mastery = await self.get(f"/lol-collections/v1/inventories/{self.summoner_id}/champion-mastery")
         return await r_mastery.json()
+
+    async def get_lol_summoner_v1_current_summoner(self) -> schemas.CurrentSummoner:
+        """Get current summoner.
+
+        Raises NotLoggedIn if status failed.
+        """
+
+        r_summoner = await self.get("/lol-summoner/v1/current-summoner")
+        if r_summoner.status != 200:
+            # silly check if league is not down
+            raise errors.NotLoggedIn("Please login into your account and restart the script...")
+        else:
+            return await r_summoner.json()
