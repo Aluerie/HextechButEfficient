@@ -3,7 +3,7 @@
 League of Legends [LCU API](<https://riot-api-libraries.readthedocs.io/en/latest/lcu.html>) scripts for quick &amp; efficient management of some chores in a min-max style.
 
 > [!NOTE]
-> You can use GUI from [Release App](https://github.com/Aluerie/HextechButEfficient/releases) as well as run yourself `main.py` or separate scripts from the folder `scripts/` yourself.
+> You can use GUI from [Release App](https://github.com/Aluerie/HextechButEfficient/releases) as well as run `__main__.py` or separate scripts from the folder `scripts/` yourself.
 
 No more annoying animations, no more chore calculations, no more chore lookups in other tab like "do I have mastery 7 on that champ?". Say "No more" to any inefficiency.
 
@@ -78,7 +78,7 @@ That means, you will not be banned for using the tool. Either way, many already 
 
 ## 🚫 No Personal Responsibility Disclaimer
 
-Despite section above, I am not to be held responsible for any losses, mistakes and "mistakes", or bugs that can lead to unfortunate situations. Use/modify my scripts on your own risk. Well, I mean, they should be fine, but still, if anything happens - I won't be able to refund those shards back or something.
+Despite the section above, I am not to be held responsible for any losses, mistakes and "mistakes", or bugs that can lead to unfortunate situations. Use/modify my scripts on your own risk. Well, I mean, they should be fine, but still, if anything happens - I won't be able to refund those shards back or something.
 
 Also, check out [LICENSE](./LICENSE) for more information about liability and warranty.
 
